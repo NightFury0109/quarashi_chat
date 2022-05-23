@@ -51,7 +51,7 @@
 			<button class="btn btn-danger secondary_button" on:click={goRegister}>Register</button>
 		</div>
 		<div class="contact">
-			<p>Need Help?&nbsp; <a href="/contact_us">Contact Us</a></p>
+			<p>Need Help?&nbsp; <a href="/login">Contact Us</a></p>
 		</div>
 	</div>
 </div>
