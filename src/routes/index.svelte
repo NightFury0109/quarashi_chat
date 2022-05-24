@@ -66,7 +66,7 @@
 	}
 	.index_box {
 		width: 465px;
-		max-height: 741px;
+		max-height: 100%;
 		background-color: var(--main_back_color);
 		border-radius: 12px;
 	}
