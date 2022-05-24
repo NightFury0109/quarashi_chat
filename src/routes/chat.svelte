@@ -5,6 +5,7 @@
 <script>
     import avatar from "./../assets/img/avatar/avatar.png";
     import search_logo from "./../assets/img/search.svg";
+    import ChatArea from '$lib/components/chat/ChatArea.svelte'
 
     import { UserPlusIcon } from "svelte-feather-icons";
 
@@ -270,7 +271,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-9 col-md-12 col-sm-12 col-12 right">world</div>
+        <div class="col-lg-9 col-md-12 col-sm-12 col-12 right">
+            <ChatArea />
+        </div>
     </div>
 </section>
 
@@ -434,5 +437,10 @@
         font-size: 12px;
         color: var(--grey_color);
         margin-bottom: 0px;
+    }
+
+    .right{
+        padding-left: 0px;
+        padding-right: 0px;
     }
 </style>
