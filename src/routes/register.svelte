@@ -4,6 +4,11 @@
 
 <script>
     import logo from "./../assets/img/logo.svg";
+    let checked = false;
+
+    const goLogin = () => {
+        window.location = "/login";
+    };
 </script>
 
 <svelte:head>
@@ -25,11 +30,19 @@
             </div>
             <div>
                 <p>Password</p>
-                <input class="form-control" placeholder="Enter Password" />
+                <input
+                    class="form-control"
+                    placeholder="Enter Password"
+                    type="password"
+                />
             </div>
             <div>
                 <p>Confirm Password</p>
-                <input class="form-control" placeholder="Enter Password" />
+                <input
+                    class="form-control"
+                    placeholder="Enter Password"
+                    type="password"
+                />
             </div>
         </div>
         <p class="des">
@@ -37,10 +50,12 @@
             store it somewhere safe.
         </p>
         <div class="privacy">
-            <input type="checkbox" />
+            <input type="checkbox" bind:checked={checked}/>
             <span>I agree to the Terms & Conditions and Privacy Policy</span>
         </div>
-        <button class="btn btn-primary form-control">Register</button>
+        <button class="btn btn-primary form-control" on:click={goLogin} disabled={!checked}
+            >Register</button
+        >
     </div>
 </div>
 
@@ -54,7 +69,7 @@
     }
     .register_box {
         width: 465px;
-        max-height: 741px;
+        max-height: 100%;
         background-color: var(--main_back_color);
         border-radius: 12px;
         padding-left: 20px;
@@ -98,6 +113,7 @@
         border-color: var(--second_back_color);
         border-radius: 12px;
         height: 57px;
+        color: white;
     }
     p.des {
         text-align: left;
@@ -114,14 +130,13 @@
         margin-left: 7px;
         color: var(--text-color);
     }
-    .privacy input[type=checkbox] {
+    .privacy input[type="checkbox"] {
         width: 22px;
         height: 22px;
         border-radius: 50%;
-
     }
 
-    .btn.btn-primary.form-control{
+    .btn.btn-primary.form-control {
         margin-top: 20px;
         margin-bottom: 20px;
         border-radius: 12px;

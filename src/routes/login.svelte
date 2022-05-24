@@ -3,7 +3,22 @@
 </script>
 
 <script>
+	import { onMount } from "svelte";
+
 	import logo from "./../assets/img/logo.svg";
+
+	onMount(() => {
+		if (typeof localStorage !== "undefined") {
+			let token = localStorage.getItem("user_token");
+			if (token) {
+				window.location = "/chat";
+			}
+		}
+	});
+
+	const goChat = () => {
+		window.location = "/chat";
+	};
 </script>
 
 <svelte:head>
@@ -25,9 +40,15 @@
 			</div>
 			<div>
 				<p>Password</p>
-				<input class="form-control" placeholder="Enter Password" />
+				<input
+					class="form-control"
+					placeholder="Enter Password"
+					type="password"
+				/>
 			</div>
-			<button class="btn btn-primary form-control">Login</button>
+			<button class="btn btn-primary form-control" on:click={goChat}
+				>Login</button
+			>
 		</div>
 	</div>
 </div>
@@ -42,7 +63,7 @@
 	}
 	.login_box {
 		width: 465px;
-		max-height: 741px;
+		max-height: 100%;
 		background-color: var(--main_back_color);
 		border-radius: 12px;
 		padding-left: 20px;
@@ -75,7 +96,6 @@
 	}
 	.input_field p {
 		text-align: left;
-		color: var(--text-color);
 	}
 	.input_field input {
 		margin-top: 12px;
@@ -84,13 +104,14 @@
 		border-color: var(--second_back_color);
 		border-radius: 12px;
 		height: 57px;
+		color: white;
 	}
 
-	.btn.btn-primary.form-control{
-        margin-top: 80px;
-        margin-bottom: 20px;
-        border-radius: 12px;
-        font-size: 12px;
-        height: 48px;
-    }
+	.btn.btn-primary.form-control {
+		margin-top: 80px;
+		margin-bottom: 20px;
+		border-radius: 12px;
+		font-size: 12px;
+		height: 48px;
+	}
 </style>
