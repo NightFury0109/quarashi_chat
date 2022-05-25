@@ -3,10 +3,10 @@
 </script>
 
 <script>
+    import { getNotificationsContext } from "svelte-notifications";
+
     import logo from "./../assets/img/logo.svg";
     import { register } from "./../api/auth/register";
-
-    import { getNotificationsContext } from "svelte-notifications";
 
     const { addNotification } = getNotificationsContext();
 
@@ -34,7 +34,7 @@
                 addNotification({
                     position: "top-center",
                     removeAfter: 3000,
-                    text: "Successfully registered!",
+                    text: "Register sucess!",
                     type: "success",
                 });
                 window.location = "/login";

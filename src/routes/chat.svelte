@@ -3,13 +3,24 @@
 </script>
 
 <script>
-    import avatar from "./../assets/img/avatar/avatar.png";
-    import search_logo from "./../assets/img/search.svg";
+    import { UserPlusIcon } from "svelte-feather-icons";
+    import { onMount } from "svelte";
+
     import ChatArea from '$lib/components/chat/ChatArea.svelte'
 
-    import { UserPlusIcon } from "svelte-feather-icons";
+    import avatar from "./../assets/img/avatar/avatar.png";
+    import search_logo from "./../assets/img/search.svg";
+    import isEmpty from "../utils/is-empty";
 
     let search;
+
+    onMount(()=>{
+        if(typeof localStorage !== "undefined"){
+            if(isEmpty(localStorage.getItem('user_token'))){
+                window.location = "/login";
+            }
+        }
+    })
 </script>
 
 <svelte:head>
