@@ -11,8 +11,9 @@
     import avatar from "./../assets/img/avatar/avatar.png";
     import search_logo from "./../assets/img/search.svg";
     import isEmpty from "../utils/is-empty";
-
-    let search;
+    import { compress, decompress } from 'lz-string'
+    
+    let search, userData;
 
     onMount(()=>{
         if(typeof localStorage !== "undefined"){
@@ -21,6 +22,10 @@
             }
         }
     })
+
+    $: if(typeof localStorage !== "undefined"){
+        userData = JSON.parse(decompress(localStorage.getItem('user_data')))
+    }
 </script>
 
 <svelte:head>
@@ -45,7 +50,7 @@
                         />
                         <div class="name">
                             <p>Hello</p>
-                            <h6>Jovan</h6>
+                            <h6>{userData?.username || "unnamed"}</h6>
                         </div>
                     </div>
                 </div>

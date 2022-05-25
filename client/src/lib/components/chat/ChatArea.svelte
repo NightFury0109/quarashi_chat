@@ -3,16 +3,22 @@
 </script>
 
 <script>
-    import { onMount } from "svelte";
-
+    import { afterUpdate, onMount } from "svelte";
     import { SendIcon } from "svelte-feather-icons";
 
-    let content, text, messge_content;
+    let content, text, messge_content, chat_content;
 
     onMount(() => {
         if (typeof document !== "undefined") {
             content = document.getElementById("sender");
             text = document.getElementById("text_area");
+        }
+    });
+
+    afterUpdate(() => {
+        if (typeof document !== "undefined") {
+            chat_content = document.getElementById("messages");
+            chat_content.scrollTop = chat_content.scrollHeight;
         }
     });
 
@@ -36,7 +42,7 @@
 </script>
 
 <div class="chat_area">
-    <div class="messages">
+    <div class="messages" id="messages">
         <div class="receive">
             <div>
                 Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -108,6 +114,96 @@
             <p class="time">5M ago</p>
         </div>
         <div class="send">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="receive">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="send">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="receive">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="send">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="receive">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="send">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="receive">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="send">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="receive">
             <div>
                 Lorem Ipsum is simply dummy text of the printing and typesetting
                 industry. Lorem Ipsum has been the industry's standard dummy
@@ -127,9 +223,13 @@
                 id="text_area"
                 bind:value={messge_content}
             />
-            <div class="icon" on:click={sendMessage}>
+            <button
+                class="icon"
+                on:click={sendMessage}
+                disabled={!messge_content}
+            >
                 <SendIcon class="sendicon" />
-            </div>
+            </button>
         </div>
     </div>
 </div>
@@ -150,6 +250,7 @@
         width: 95%;
         border: none;
         color: white;
+        resize: none;
     }
     .input_group textarea:hover,
     .input_group textarea:active,
@@ -198,7 +299,7 @@
         color: var(--grey_color);
     }
     .messages .send {
-        background-color: #FF8B77;
+        background-color: #ff8b77;
         width: 70%;
         font-size: 12px;
         padding: 20px;
@@ -209,9 +310,9 @@
         color: white;
         float: right;
         margin-top: 10px;
-        margin-bottom: 10px
+        margin-bottom: 10px;
     }
-    .messages .send .time{
+    .messages .send .time {
         text-align: right;
         color: #bebec1;
     }
@@ -237,5 +338,6 @@
         background-color: #092031;
         border-radius: 12px;
         padding: 7px;
+        border: none;
     }
 </style>
