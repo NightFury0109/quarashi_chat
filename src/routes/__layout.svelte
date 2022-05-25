@@ -1,10 +1,15 @@
 <script>
 	import '../app.css';
+	import Notifications from 'svelte-notifications';
+
+	import CustomNotification from '$lib/components/notification/CustomNotification.svelte'
 </script>
 
-<main>
-	<slot />
-</main>
+<Notifications>
+	<main>
+		<slot />
+	</main>
+</Notifications>
 
 <style>
 	main {
