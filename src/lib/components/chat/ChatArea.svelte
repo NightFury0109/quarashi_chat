@@ -36,7 +36,88 @@
 </script>
 
 <div class="chat_area">
-    <div class="messages">Hello</div>
+    <div class="messages">
+        <div class="receive">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="send">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="receive">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="send">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="receive">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="send">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="receive">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+        <div class="send">
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries,
+            </div>
+            <p class="time">5M ago</p>
+        </div>
+    </div>
     <div class="sender" id="sender">
         <div class="input_group">
             <textarea
@@ -78,11 +159,68 @@
         outline: none !important;
     }
 
+    .messages {
+        padding-top: 30px;
+        padding-left: 40px;
+        padding-right: 40px;
+        max-height: calc(100vh - 135px);
+        overflow-y: scroll;
+    }
+    .messages::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .messages::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .messages::-webkit-scrollbar-thumb {
+        background-color: black;
+        border-radius: 5px;
+    }
+
+    .messages .receive {
+        background-color: var(--background_color);
+        width: 70%;
+        font-size: 12px;
+        padding: 20px;
+        padding-bottom: 8px;
+        border-radius: 12px;
+        border-top-left-radius: 0px;
+        line-height: 24px;
+        color: white;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        float: left;
+    }
+    .messages .receive .time {
+        text-align: right;
+        color: var(--grey_color);
+    }
+    .messages .send {
+        background-color: #FF8B77;
+        width: 70%;
+        font-size: 12px;
+        padding: 20px;
+        padding-bottom: 8px;
+        border-radius: 12px;
+        border-top-right-radius: 0px;
+        line-height: 24px;
+        color: white;
+        float: right;
+        margin-top: 10px;
+        margin-bottom: 10px
+    }
+    .messages .send .time{
+        text-align: right;
+        color: #bebec1;
+    }
+
     .sender {
         background-color: var(--background_color);
         min-height: 85px;
         height: 85px;
-        padding: 28px;
+        padding: 25px;
         position: absolute;
         bottom: 0px;
         width: 100%;
