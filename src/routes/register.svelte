@@ -4,10 +4,42 @@
 
 <script>
     import logo from "./../assets/img/logo.svg";
+    import { register } from "./../api/auth/register";
+
+    import { getNotificationsContext } from "svelte-notifications";
+
+    const { addNotification } = getNotificationsContext();
+
     let checked = false;
+    let username, password, repassword;
 
     const goLogin = () => {
-        window.location = "/login";
+        if (!password || !repassword || !username) {
+            addNotification({
+                position: "top-center",
+                removeAfter: 3000,
+                text: "Fill the all item!",
+                type: "danger",
+            });
+        } else if (password != repassword) {
+            addNotification({
+                position: "top-center",
+                removeAfter: 3000,
+                text: "Password is different!",
+                type: "danger",
+            });
+        } else {
+            let result = register({ username: username, password: password });
+            if (result) {
+                addNotification({
+                    position: "top-center",
+                    removeAfter: 3000,
+                    text: "Successfully registered!",
+                    type: "success",
+                });
+                window.location = "/login";
+            }
+        }
     };
 </script>
 
@@ -26,7 +58,11 @@
         <div class="input_field">
             <div>
                 <p>Username</p>
-                <input class="form-control" placeholder="Enter Username" />
+                <input
+                    class="form-control"
+                    placeholder="Enter Username"
+                    bind:value={username}
+                />
             </div>
             <div>
                 <p>Password</p>
@@ -34,6 +70,7 @@
                     class="form-control"
                     placeholder="Enter Password"
                     type="password"
+                    bind:value={password}
                 />
             </div>
             <div>
@@ -42,6 +79,7 @@
                     class="form-control"
                     placeholder="Enter Password"
                     type="password"
+                    bind:value={repassword}
                 />
             </div>
         </div>
@@ -50,11 +88,13 @@
             store it somewhere safe.
         </p>
         <div class="privacy">
-            <input type="checkbox" bind:checked={checked}/>
+            <input type="checkbox" bind:checked />
             <span>I agree to the Terms & Conditions and Privacy Policy</span>
         </div>
-        <button class="btn btn-primary form-control" on:click={goLogin} disabled={!checked}
-            >Register</button
+        <button
+            class="btn btn-primary form-control"
+            on:click={goLogin}
+            disabled={!checked}>Register</button
         >
     </div>
 </div>
