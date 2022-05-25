@@ -183,4 +183,12 @@
         font-size: 12px;
         height: 48px;
     }
+
+    @media (max-height: 768px) {
+        .register {
+            height: 100%;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+    }
 </style>

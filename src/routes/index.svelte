@@ -6,12 +6,12 @@
 	import logo from "./../assets/img/logo.svg";
 
 	const goRegister = () => {
-		window.location = "/register"
-	}
+		window.location = "/register";
+	};
 
 	const goLgoin = () => {
-		window.location = "/login"
-	}
+		window.location = "/login";
+	};
 </script>
 
 <svelte:head>
@@ -22,7 +22,7 @@
 <div class="index">
 	<div class="index_box">
 		<div class="logo">
-			<img src={logo} alt="logo"/>
+			<img src={logo} alt="logo" />
 		</div>
 		<h1>Quarashi</h1>
 		<p>You Control Your Data</p>
@@ -48,7 +48,10 @@
 			<button class="btn btn-primary secondary_button" on:click={goLgoin}
 				>Login</button
 			>
-			<button class="btn btn-danger secondary_button" on:click={goRegister}>Register</button>
+			<button
+				class="btn btn-danger secondary_button"
+				on:click={goRegister}>Register</button
+			>
 		</div>
 		<div class="contact">
 			<p>Need Help?&nbsp; <a href="/login">Contact Us</a></p>
@@ -73,7 +76,7 @@
 	.logo {
 		display: flex;
 		justify-content: center;
-		margin-top: 130px
+		margin-top: 130px;
 	}
 	.logo img {
 		background-color: var(--logo_color);
@@ -84,7 +87,7 @@
 	.index_box h1 {
 		text-transform: uppercase;
 		font-size: 18px;
-        font-weight: bolder;
+		font-weight: bolder;
 		margin-top: 20px;
 	}
 	.index_box p {
@@ -115,22 +118,34 @@
 		align-items: center;
 		justify-content: center;
 	}
-	.auth_buttons button{
+	.auth_buttons button {
 		margin: 15px;
 		width: 200px;
 		height: 40px;
 		border-radius: 12px;
 		font-size: 12px;
 	}
-	.auth_buttons .btn-primary{
+	.auth_buttons .btn-primary {
 		background-color: var(--primary-color);
 	}
-	.auth_buttons .btn-danger{
+	.auth_buttons .btn-danger {
 		background-color: var(--danger-color);
 	}
-	.contact{
+	.contact {
 		margin-top: 100px;
 		margin-bottom: 40px;
 	}
-</style>
 
+	@media (max-height: 768px) {
+		.logo {
+			margin-top: 40px;
+		}
+	}
+	@media (max-height: 686px) {
+		.index {
+			height: 100%;
+			padding-top: 20px;
+            padding-bottom: 20px;
+		}
+	}
+</style>

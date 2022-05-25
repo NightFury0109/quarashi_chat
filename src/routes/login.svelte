@@ -149,4 +149,10 @@
 		font-size: 12px;
 		height: 48px;
 	}
+
+	@media (max-height: 615px) {
+		.login {
+			height: 100%;
+		}
+	}
 </style>
