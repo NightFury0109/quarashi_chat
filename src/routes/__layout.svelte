@@ -1,8 +1,6 @@
 <script>
 	import '../app.css';
 	import Notifications from 'svelte-notifications';
-
-	import CustomNotification from '$lib/components/notification/CustomNotification.svelte'
 </script>
 
 <Notifications>

@@ -4,8 +4,13 @@
 
 <script>
 	import { onMount } from "svelte";
+	import { getNotificationsContext } from "svelte-notifications";
 
 	import logo from "./../assets/img/logo.svg";
+	import { login } from "./../api/auth/login";
+
+	const { addNotification } = getNotificationsContext();
+	let username, password;
 
 	onMount(() => {
 		if (typeof localStorage !== "undefined") {
@@ -17,7 +22,32 @@
 	});
 
 	const goChat = () => {
-		window.location = "/chat";
+		if (!password || !username) {
+			addNotification({
+				position: "top-center",
+				removeAfter: 3000,
+				text: "Fill the all item!",
+				type: "danger",
+			});
+		} else {
+			let result = login({ username: username, password: password });
+			if (result) {
+				addNotification({
+					position: "top-center",
+					removeAfter: 3000,
+					text: "Login success!",
+					type: "success",
+				});
+				window.location = "/chat";
+			} else {
+				addNotification({
+					position: "top-center",
+					removeAfter: 3000,
+					text: "Login is failed!",
+					type: "danger",
+				});
+			}
+		}
 	};
 </script>
 
@@ -36,7 +66,11 @@
 		<div class="input_field">
 			<div>
 				<p>Username</p>
-				<input class="form-control" placeholder="Enter Username" />
+				<input
+					class="form-control"
+					placeholder="Enter Username"
+					bind:value={username}
+				/>
 			</div>
 			<div>
 				<p>Password</p>
@@ -44,6 +78,7 @@
 					class="form-control"
 					placeholder="Enter Password"
 					type="password"
+					bind:value={password}
 				/>
 			</div>
 			<button class="btn btn-primary form-control" on:click={goChat}
