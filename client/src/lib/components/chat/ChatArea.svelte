@@ -18,7 +18,7 @@
     afterUpdate(() => {
         if (typeof document !== "undefined") {
             chat_content = document.getElementById("messages");
-            chat_content.scrollTop = chat_content.scrollHeight+100;
+            chat_content.scrollTop = chat_content.scrollHeight + 100;
         }
     });
 
