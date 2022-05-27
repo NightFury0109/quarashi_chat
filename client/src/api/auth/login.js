@@ -1,5 +1,6 @@
 import { compress, decompress } from 'lz-string'
 import isEmpty from './../../utils/is-empty'
+import api from './../../utils/api'
 
 export const login = (userData) => {
     if (typeof localStorage !== "undefined") {
