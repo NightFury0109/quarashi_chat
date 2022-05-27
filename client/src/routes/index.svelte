@@ -145,7 +145,7 @@
 		.index {
 			height: 100%;
 			padding-top: 20px;
-            padding-bottom: 20px;
+			padding-bottom: 20px;
 		}
 	}
 </style>

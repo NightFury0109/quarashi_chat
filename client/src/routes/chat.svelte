@@ -3,29 +3,36 @@
 </script>
 
 <script>
-    import { UserPlusIcon } from "svelte-feather-icons";
+    import { UserPlusIcon, LogOutIcon } from "svelte-feather-icons";
     import { onMount } from "svelte";
 
-    import ChatArea from '$lib/components/chat/ChatArea.svelte'
+    import ChatArea from "$lib/components/chat/ChatArea.svelte";
 
     import avatar from "./../assets/img/avatar/avatar.png";
     import search_logo from "./../assets/img/search.svg";
     import isEmpty from "../utils/is-empty";
-    import { compress, decompress } from 'lz-string'
-    
+    import { compress, decompress } from "lz-string";
+
     let search, userData;
 
-    onMount(()=>{
-        if(typeof localStorage !== "undefined"){
-            if(isEmpty(localStorage.getItem('user_token'))){
+    onMount(() => {
+        if (typeof localStorage !== "undefined") {
+            if (isEmpty(localStorage.getItem("user_token"))) {
                 window.location = "/login";
             }
         }
-    })
+    });
 
-    $: if(typeof localStorage !== "undefined"){
-        userData = JSON.parse(decompress(localStorage.getItem('user_data')))
+    $: if (typeof localStorage !== "undefined") {
+        userData = JSON.parse(decompress(localStorage.getItem("user_data")));
     }
+
+    const logout = () => {
+        if (typeof localStorage !== "undefined") {
+            localStorage.removeItem("user_token");
+            window.location = "/login";
+        }
+    };
 </script>
 
 <svelte:head>
@@ -118,6 +125,9 @@
                     <div class="time_ago">5M Ago</div>
                 </div>
             </div>
+            <div class="logout" on:click={logout}>
+                <LogOutIcon />
+            </div>
         </div>
         <div class="col-lg-9 col-md-12 col-sm-12 col-12 right">
             <ChatArea />
@@ -146,6 +156,7 @@
         border-top-left-radius: 12px;
         padding-left: 0px;
         padding-right: 0px;
+        position: relative;
     }
     .chat .right {
         border: 1px solid #22232e;
@@ -287,8 +298,21 @@
         margin-bottom: 0px;
     }
 
-    .right{
+    .right {
         padding-left: 0px;
         padding-right: 0px;
+    }
+
+    .logout {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        background-color: #22232e;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 12px;
     }
 </style>
