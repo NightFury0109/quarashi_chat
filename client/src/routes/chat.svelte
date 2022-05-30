@@ -11,7 +11,8 @@
     import avatar from "./../assets/img/avatar/avatar.png";
     import search_logo from "./../assets/img/search.svg";
     import isEmpty from "../utils/is-empty";
-    import { compress, decompress } from "lz-string";
+    import LZString from "lz-string";
+    const { decompress } = LZString;
 
     let search, userData;
 
