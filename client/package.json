@@ -22,9 +22,6 @@
     "axios": "^0.27.2",
     "cookie": "^0.4.1",
     "lz-string": "^1.4.4",
-    "socket.io": "^4.5.1",
-    "socket.io-client": "^4.5.1",
-    "socket.io-p2p": "^2.2.0",
     "svelte-feather-icons": "^4.0.0",
     "svelte-notifications": "^0.9.95"
   }
