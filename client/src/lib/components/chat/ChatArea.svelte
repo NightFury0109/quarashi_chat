@@ -5,7 +5,7 @@
 <script>
     import { afterUpdate, onMount } from "svelte";
     import { SendIcon } from "svelte-feather-icons";
-    import { send_message } from './../../../api/message/message'
+    import { send_message } from "./../../../api/message/message";
 
     let content, text, messge_content, chat_content;
 
@@ -36,7 +36,7 @@
     };
 
     const sendMessage = (e) => {
-        send_message(messge_content)
+        send_message(messge_content);
         messge_content = "";
         content.style.height = 85 + "px";
         text.style.height = 30 + "px";

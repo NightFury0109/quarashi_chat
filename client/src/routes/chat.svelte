@@ -83,7 +83,7 @@
             </div>
 
             <div class="user_list">
-                <div class="user">
+                <div class="user active">
                     <div class="avatar_name">
                         <div
                             style="position: relative; width:44px; height:44px"
@@ -267,6 +267,12 @@
         padding-right: 20px;
         border-bottom: 1px solid #22232e;
         align-items: center;
+    }
+    .user:hover{
+        background-color: #0B0B12
+    }
+    .user.active{
+        background-color: #0B0B12
     }
     .status {
         position: absolute;
