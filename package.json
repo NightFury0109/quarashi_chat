@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   "dependencies": {
     "express": "^4.18.1",
     "node-pre-gyp": "^0.17.0",
+    "nodemon": "^2.0.16",
     "socket.io": "^4.5.1",
     "socket.io-p2p-server": "^1.2.0"
   }
