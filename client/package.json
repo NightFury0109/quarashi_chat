@@ -22,6 +22,7 @@
     "axios": "^0.27.2",
     "cookie": "^0.4.1",
     "lz-string": "^1.4.4",
+    "p2p-chat": "^3.0.0",
     "svelte-feather-icons": "^4.0.0",
     "svelte-notifications": "^0.9.95"
   }
