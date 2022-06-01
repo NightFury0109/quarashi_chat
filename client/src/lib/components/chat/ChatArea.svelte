@@ -5,9 +5,14 @@
 <script>
     import { afterUpdate, onMount } from "svelte";
     import { SendIcon } from "svelte-feather-icons";
-    import { send_message } from "../../../api/message/message";
+    import { send_message } from "../../../api/message/message.js";
 
-    let content, text, messge_content, chat_content;
+
+    let content, text, messge_content, chat_content, current_time;
+
+    $: setInterval(() => {
+        current_time = new Date();
+    });
 
     onMount(() => {
         if (typeof document !== "undefined") {
@@ -35,8 +40,52 @@
         }
     };
 
-    const sendMessage = async (e) => {
-        await send_message(messge_content);
+    let difference2Parts = (milliseconds) => {
+        const secs = Math.floor(Math.abs(milliseconds) / 1000);
+        const mins = Math.floor(secs / 60);
+        const hours = Math.floor(mins / 60);
+        const days = Math.floor(hours / 24);
+        const millisecs = Math.floor(Math.abs(milliseconds)) % 1000;
+        const multiple = (term, n) => (n !== 1 ? `${n} ${term}s` : `1 ${term}`);
+
+        return {
+            days: days,
+            hours: hours % 24,
+            hoursTotal: hours,
+            minutesTotal: mins,
+            minutes: mins % 60,
+            seconds: secs % 60,
+            secondsTotal: secs,
+            milliSeconds: millisecs,
+            get diffStr() {
+                return `${multiple(`day`, this.days)}, ${multiple(
+                    `hour`,
+                    this.hours
+                )}, ${multiple(`minute`, this.minutes)} and ${multiple(
+                    `second`,
+                    this.seconds
+                )}`;
+            },
+            get diffStrMs() {
+                return `${this.diffStr.replace(` and`, `, `)} and ${multiple(
+                    `millisecond`,
+                    this.milliSeconds
+                )}`;
+            },
+        };
+    };
+
+    const sendMessage = (e) => {
+        send_message(messge_content);
+        let create_time = new Date();
+        let diffs = difference2Parts(current_time - create_time);
+        chat_content.innerHTML += `<div class='send'>\
+            <div>${messge_content}</div>\
+            <p class='time'>${
+                diffs.hoursTotal > 0 ? diffs.hoursTotal + "H" : ""
+            } ${diffs.minutesTotal + "M ago"}
+        </p>\
+        </div>`;
         messge_content = "";
         content.style.height = 85 + "px";
         text.style.height = 30 + "px";
