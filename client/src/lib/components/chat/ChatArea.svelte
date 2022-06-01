@@ -19,6 +19,11 @@
             content = document.getElementById("sender");
             text = document.getElementById("text_area");
         }
+        if(window.isSecureContext){
+            console.log("Secure")
+        } else {
+            console.log("unSecure")
+        }
     });
 
     afterUpdate(() => {
@@ -75,7 +80,7 @@
         };
     };
 
-    const sendMessage = (e) => {
+    const sendMessage = () => {
         send_message(messge_content);
         let create_time = new Date();
         let diffs = difference2Parts(current_time - create_time);

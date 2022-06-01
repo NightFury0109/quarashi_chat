@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Create a instance of axios to use the same base url.
-const axiosAPI = axios.create({baseURL: "http://localhost:9000"});
+const axiosAPI = axios.create({baseURL: "http://localhost:5000"});
 
 // Implement a method to execute all the request from here
 

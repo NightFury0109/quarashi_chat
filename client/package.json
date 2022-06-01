@@ -2,7 +2,7 @@
   "name": "quarashi-chat",
   "version": "0.0.1",
   "scripts": {
-    "dev": "svelte-kit dev",
+    "dev": "svelte-kit dev --port 3030",
     "build": "svelte-kit build",
     "package": "svelte-kit package",
     "preview": "svelte-kit preview",
@@ -23,10 +23,10 @@
     "cookie": "^0.4.1",
     "lz-string": "^1.4.4",
     "simple-peer": "^9.11.1",
+    "socket.io-client": "^4.5.1",
     "svelte-feather-icons": "^4.0.0",
     "svelte-notifications": "^0.9.95",
     "svelte-preprocess": "^4.10.6",
-    "webrtc-adapter": "^8.1.1",
     "wrtc": "^0.4.7"
   }
 }
