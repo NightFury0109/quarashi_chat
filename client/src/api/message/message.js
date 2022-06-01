@@ -6,19 +6,16 @@ let socket = io.connect('http://localhost:5000');
 export const connectRTC = () => {
     let peerConnection = new RTCPeerConnection(iceServers);
 
-    console.log(peerConnection)
-
     peerConnection.onicecandidate = event => {
+        console.log('event', event)
         if (event.candidate) {
             sendMessage({ 'candidate': event.candidate });
         }
     };
-
-    registerPeerConnectionListeners()
-
+    registerPeerConnectionListeners(peerConnection)
 }
 
-const registerPeerConnectionListeners = () => {
+const registerPeerConnectionListeners = (peerConnection) => {
     peerConnection.addEventListener('icegatheringstatechange', () => {
         console.log(
             `ICE gathering state changed: ${peerConnection.iceGatheringState}`);

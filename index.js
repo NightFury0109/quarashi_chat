@@ -6,13 +6,10 @@ const io = require('socket.io')(server, {
         origin: '*',
     }
 });
-const p2p = require('socket.io-p2p-server').Server;
 
 server.listen(5000, () => {
     console.log(`Server started on port 5000 :)`);
 });
-
-io.use(p2p);
 
 io.on('connection', function (socket) {
     socket.on('peer-msg', function (data) {
