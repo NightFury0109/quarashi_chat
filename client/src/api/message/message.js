@@ -1,17 +1,22 @@
 import api from '../../utils/api.js'
 import { iceServers } from './../../utils/iceServers.js'
 import io from 'socket.io-client';
-socket = io.connect('http://localhost:5000');
+let socket = io.connect('http://localhost:5000');
 
-let peerConnection = new RTCPeerConnection(iceServers);
+export const connectRTC = () => {
+    let peerConnection = new RTCPeerConnection(iceServers);
 
-peerConnection.onicecandidate = event => {
-    if (event.candidate) {
-        sendMessage({ 'candidate': event.candidate });
-    }
-};
+    console.log(peerConnection)
 
-registerPeerConnectionListeners()
+    peerConnection.onicecandidate = event => {
+        if (event.candidate) {
+            sendMessage({ 'candidate': event.candidate });
+        }
+    };
+
+    registerPeerConnectionListeners()
+
+}
 
 const registerPeerConnectionListeners = () => {
     peerConnection.addEventListener('icegatheringstatechange', () => {

@@ -5,7 +5,7 @@
 <script>
     import { afterUpdate, onMount } from "svelte";
     import { SendIcon } from "svelte-feather-icons";
-    import { send_message } from "../../../api/message/message.js";
+    import { send_message, connectRTC } from "../../../api/message/message.js";
 
 
     let content, text, messge_content, chat_content, current_time;
@@ -24,6 +24,7 @@
         } else {
             console.log("unSecure")
         }
+        connectRTC();
     });
 
     afterUpdate(() => {
