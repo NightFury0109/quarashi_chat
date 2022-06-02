@@ -1,3 +1,6 @@
-export const iceServers = {
-    'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]
-};
+export const iceServers =
+    [{
+        urls: 'turn:turn.anyfirewall.com:443?transport=tcp',
+        username: 'webrtc',
+        credential: 'webrtc',
+    }] ;

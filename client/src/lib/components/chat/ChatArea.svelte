@@ -19,11 +19,6 @@
             content = document.getElementById("sender");
             text = document.getElementById("text_area");
         }
-        if(window.isSecureContext){
-            console.log("Secure")
-        } else {
-            console.log("unSecure")
-        }
         connectRTC();
     });
 
