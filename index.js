@@ -24,7 +24,6 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('go-private', data)
     })
     socket.on("message", (details) => {
-        socket.broadcast.to(details.room).emit(socketActions.message, details);
         console.log(details)
     });
 })
