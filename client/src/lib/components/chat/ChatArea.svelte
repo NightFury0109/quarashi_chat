@@ -5,8 +5,8 @@
 <script>
     import { afterUpdate, onMount } from "svelte";
     import { SendIcon } from "svelte-feather-icons";
-    import { send_message, connectRTC } from "../../../api/message/message.js";
-
+    import { send_message } from "../../../api/message/message.js";
+    import { connectRTC } from '../../../api/webrtc'
 
     let content, text, messge_content, chat_content, current_time;
 

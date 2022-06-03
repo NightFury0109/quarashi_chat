@@ -8,6 +8,7 @@ export const login = (userData) => {
         }
         let registered_info = JSON.parse(decompress(localStorage.getItem('user_data')))
 
+
         if (userData.username == registered_info.username && userData.password == registered_info.password) {
             localStorage.setItem('user_token', compress(userData))
             return true
