@@ -95,7 +95,7 @@
 
 <div class="chat_area">
     <div class="messages" id="messages">
-        <div class="receive">
+        <!-- <div class="receive">
             <div>
                 Lorem Ipsum is simply dummy text of the printing and typesetting
                 industry. Lorem Ipsum has been the industry's standard dummy
@@ -114,7 +114,7 @@
                 survived not only five centuries,
             </div>
             <p class="time">5M ago</p>
-        </div>
+        </div> -->
     </div>
     <div class="sender" id="sender">
         <div class="input_group">

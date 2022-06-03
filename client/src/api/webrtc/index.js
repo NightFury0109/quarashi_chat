@@ -1,13 +1,17 @@
 import { iceServers } from './../../utils/iceServers.js'
-let sendChannel, receiveChannel, localConnection, remoteConnection, isInitiator, room;
+let sendChannel, receiveChannel, localConnection, remoteConnection, isInitiator;
 import { localConnectionStore, remoteConnectionStore, sendChannelStore, receiveChannelStore } from './../../store'
+import { io } from "socket.io-client";
+
+let socket = io('http://localhost:5000', { secure: true});;
+let room = "lionheart";
+console.log(socket)
+
+export const connectSocket = () => {
+    socket.emit('create or join', room)
+}
 
 export const connectRTC = () => {
-    // local side
-    room = "lionheart";
-    let socket = io.connect('http://127.0.0.1:5000');
-    
-    socket.emit('create or join', room)
     socket.on('ipaddr', (ipaddr) => {
         console.log(ipaddr)
     });
@@ -32,6 +36,7 @@ export const connectRTC = () => {
         console.log('Client received message:', message);
         signalingMessageCallback(message);
     })
+    // local side
 
     // Remote side
     // remoteConnection = new RTCPeerConnection(iceServers);

@@ -7,6 +7,7 @@
     import { onMount } from "svelte";
 
     import ChatArea from "$lib/components/chat/ChatArea.svelte";
+    import { connectSocket } from "./../api/webrtc";
 
     import avatar from "./../assets/img/avatar/avatar.png";
     import search_logo from "./../assets/img/search.svg";
@@ -33,6 +34,11 @@
             localStorage.removeItem("user_token");
             window.location = "/login";
         }
+    };
+
+    const connectWRTC = (e) => {
+        e.preventDefault();
+        connectSocket();
     };
 </script>
 
@@ -83,7 +89,7 @@
             </div>
 
             <div class="user_list">
-                <div class="user active">
+                <div class="user" on:click={connectWRTC}>
                     <div class="avatar_name">
                         <div
                             style="position: relative; width:44px; height:44px"
@@ -104,7 +110,7 @@
                     </div>
                     <div class="time_ago">5M Ago</div>
                 </div>
-                <div class="user">
+                <!-- <div class="user">
                     <div class="avatar_name">
                         <div
                             style="position: relative; width:44px; height:44px"
@@ -124,7 +130,7 @@
                         </div>
                     </div>
                     <div class="time_ago">5M Ago</div>
-                </div>
+                </div> -->
             </div>
             <div class="logout" on:click={logout}>
                 <LogOutIcon />
@@ -268,11 +274,11 @@
         border-bottom: 1px solid #22232e;
         align-items: center;
     }
-    .user:hover{
-        background-color: #0B0B12
+    .user:hover {
+        background-color: #0b0b12;
     }
-    .user.active{
-        background-color: #0B0B12
+    .user.active {
+        background-color: #0b0b12;
     }
     .status {
         position: absolute;
