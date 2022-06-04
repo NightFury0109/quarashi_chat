@@ -38,6 +38,7 @@
 
     const connectWRTC = (e) => {
         e.preventDefault();
+        e.target.classList.add("active");
         connectSocket();
     };
 </script>
@@ -277,9 +278,6 @@
     .user:hover {
         background-color: #0b0b12;
     }
-    .user.active {
-        background-color: #0b0b12;
-    }
     .status {
         position: absolute;
         width: 10px;
@@ -291,9 +289,6 @@
     }
     .status.active {
         background-color: greenyellow;
-    }
-    .status.inactive {
-        background-color: grey;
     }
     .avatar_name {
         display: flex;

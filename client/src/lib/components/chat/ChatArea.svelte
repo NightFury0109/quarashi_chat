@@ -182,43 +182,6 @@
         border-radius: 5px;
     }
 
-    .messages .receive {
-        background-color: var(--background_color);
-        width: 70%;
-        font-size: 12px;
-        padding: 20px;
-        padding-bottom: 8px;
-        border-radius: 12px;
-        border-top-left-radius: 0px;
-        line-height: 24px;
-        color: white;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        float: left;
-    }
-    .messages .receive .time {
-        text-align: right;
-        color: var(--grey_color);
-    }
-    .messages .send {
-        background-color: #ff8b77;
-        width: 70%;
-        font-size: 12px;
-        padding: 20px;
-        padding-bottom: 8px;
-        border-radius: 12px;
-        border-top-right-radius: 0px;
-        line-height: 24px;
-        color: white;
-        float: right;
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-    .messages .send .time {
-        text-align: right;
-        color: #bebec1;
-    }
-
     .sender {
         background-color: var(--background_color);
         min-height: 85px;

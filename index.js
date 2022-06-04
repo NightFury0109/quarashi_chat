@@ -1,6 +1,7 @@
 const express = require("express");
+const os = require('os');
 const { createServer } = require("http");
-const { Server } = require("socket.io");
+const  Server = require("socket.io");
 
 const app = express();
 const httpServer = createServer(app);
@@ -26,10 +27,8 @@ io.on('connection', (socket) => {
     });
 
     socket.on('create or join', (room) => {
-        console.log('Received request to create or join room ', room);
-
-        let clientsInRoom = io.sockets.adapter.rooms[room];
-        let numClients = clientsInRoom ? Object.keys(clientsInRoom.sockets).length : 0;
+        var clientsInRoom = io.sockets.adapter.rooms[room];
+        var numClients = clientsInRoom ? Object.keys(clientsInRoom.sockets).length : 0;
         console.log('Room ' + room + ' now has ' + numClients + ' client(s)');
 
         if (numClients === 0) {
@@ -38,7 +37,7 @@ io.on('connection', (socket) => {
             socket.emit('created', room, socket.id);
         } else if (numClients === 1) {
             console.log('Client ID ' + socket.id + ' joined room ' + room);
-            // io.sockets.in(room).emit('join', room);
+            io.sockets.in(room).emit('join', room);
             socket.join(room);
             socket.emit('joined', room, socket.id);
             io.sockets.in(room).emit('ready', room);

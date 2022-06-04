@@ -1,17 +1,20 @@
 import { iceServers } from './../../utils/iceServers.js'
 let sendChannel, receiveChannel, localConnection, remoteConnection, isInitiator;
 import { localConnectionStore, remoteConnectionStore, sendChannelStore, receiveChannelStore } from './../../store'
-import { io } from "socket.io-client";
 
-let socket = io('http://localhost:5000', { secure: true});;
+let socket;
 let room = "lionheart";
-console.log(socket)
 
 export const connectSocket = () => {
+    console.log(room)
     socket.emit('create or join', room)
+    if (location.hostname.match(/localhost|127\.0\.0/)) {
+        socket.emit('ipaddr');
+    }
 }
 
 export const connectRTC = () => {
+    socket =  io('http://localhost:5000');
     socket.on('ipaddr', (ipaddr) => {
         console.log(ipaddr)
     });
@@ -20,22 +23,24 @@ export const connectRTC = () => {
     })
     socket.on('joined', (room, clientId) => {
         console.log('This Peer has joined room ', room, 'with clientID', clientId)
-        createPeerConnection(isInitiator)
+        // createPeerConnection(isInitiator)
     })
     socket.on('full', () => {
         console.log('room ', room, ' is full.')
     })
     socket.on('ready', () => {
         console.log('socket is ready')
-        createPeerConnection(isInitiator);
+        // createPeerConnection(isInitiator);
     })
     socket.on('log', () => {
         console.log.apply(console, array);
     })
     socket.on('message', (message) => {
         console.log('Client received message:', message);
-        signalingMessageCallback(message);
+        // signalingMessageCallback(message);
     })
+
+
     // local side
 
     // Remote side
