@@ -39,6 +39,7 @@
     const connectWRTC = (e) => {
         e.preventDefault();
         e.target.classList.add("active");
+        console.log(e.target)
         connectSocket();
     };
 </script>
