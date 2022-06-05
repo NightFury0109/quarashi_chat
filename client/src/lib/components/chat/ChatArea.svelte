@@ -1,32 +1,51 @@
-<script context="module">
-    export const prerender = true;
-</script>
-
 <script>
+    import { compress, decompress } from "lz-string";
     import { afterUpdate, onMount } from "svelte";
     import { SendIcon } from "svelte-feather-icons";
     import { send_message } from "../../../api/message/message.js";
-    import { connectRTC } from '../../../api/webrtc'
+    import isEmpty from "../../../utils/is-empty.js";
 
-    let content, text, messge_content, chat_content, current_time;
+    export let room = "";
+
+    let content,
+        text,
+        messge_content,
+        chat_content,
+        current_time,
+        message,
+        username;
 
     $: setInterval(() => {
         current_time = new Date();
+        if (typeof document !== "undefined" && room !== "") {
+            chat_content = document.getElementById("messages");
+            chat_content.scrollTop = chat_content.scrollHeight + 100;
+        }
+        if (typeof localStorage !== "undefined") {
+            if (isEmpty(localStorage.getItem("message"))) {
+                message = {};
+            } else {
+                message = JSON.parse(localStorage.getItem("message"));
+            }
+        }
     });
+
+    $: if (typeof localStorage !== "undefined") {
+        if (isEmpty(localStorage.getItem("message"))) {
+            message = {};
+        } else {
+            message = JSON.parse(localStorage.getItem("message"));
+        }
+    }
 
     onMount(() => {
         if (typeof document !== "undefined") {
             content = document.getElementById("sender");
             text = document.getElementById("text_area");
         }
-        connectRTC();
-    });
-
-    afterUpdate(() => {
-        if (typeof document !== "undefined") {
-            chat_content = document.getElementById("messages");
-            chat_content.scrollTop = chat_content.scrollHeight + 100;
-        }
+        username = JSON.parse(decompress(localStorage.getItem("user_token")))[
+            "username"
+        ];
     });
 
     const detectShiftEnter = (e) => {
@@ -77,44 +96,65 @@
     };
 
     const sendMessage = () => {
-        send_message(messge_content);
-        let create_time = new Date();
-        let diffs = difference2Parts(current_time - create_time);
-        chat_content.innerHTML += `<div class='send'>\
-            <div>${messge_content}</div>\
-            <p class='time'>${
-                diffs.hoursTotal > 0 ? diffs.hoursTotal + "H" : ""
-            } ${diffs.minutesTotal + "M ago"}
-        </p>\
-        </div>`;
-        messge_content = "";
-        content.style.height = 85 + "px";
-        text.style.height = 30 + "px";
+        if (messge_content !== "" && room !== "") {
+            send_message(messge_content);
+            let create_time = new Date();
+            let diffs = difference2Parts(current_time - create_time);
+            if (typeof localStorage !== "undefined") {
+                let sender = JSON.parse(
+                    decompress(localStorage.getItem("user_token"))
+                )["username"];
+                let data = {
+                    message_content: messge_content,
+                    time: create_time,
+                    sender: sender,
+                };
+                if (isEmpty(message[`${room}`])) {
+                    message[`${room}`] = [];
+                } else {
+                    // <p class='time'>${
+                    //                 diffs.hoursTotal > 0
+                    //                     ? diffs.hoursTotal + "H"
+                    //                     : ""
+                    //             } ${diffs.minutesTotal + "M ago"}
+                    //             </p>\
+                    // chat_content.innerHTML += `<div class='send'>\
+                    //             <div>${messge_content}</div>\
+                    //             <p class='time'>${current_time.toISOString()}\
+                    //             </p>\
+                    //         </div>`;
+                }
+                message[`${room}`].push(data);
+                localStorage.setItem("message", JSON.stringify(message));
+            }
+            messge_content = "";
+            content.style.height = 85 + "px";
+            text.style.height = 30 + "px";
+        }
     };
 </script>
 
 <div class="chat_area">
     <div class="messages" id="messages">
-        <!-- <div class="receive">
-            <div>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book. It has
-                survived not only five centuries,
-            </div>
-            <p class="time">5M ago</p>
-        </div>
-        <div class="send">
-            <div>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book. It has
-                survived not only five centuries,
-            </div>
-            <p class="time">5M ago</p>
-        </div> -->
+        {#if !isEmpty(message)}
+            {#each message[`${room}`] as item}
+                {#if item.sender === username}
+                    <div class="send">
+                        <div>
+                            {item.message_content}
+                        </div>
+                        <p class="time">{item.time}</p>
+                    </div>
+                {:else}
+                    <div class="receive">
+                        <div>
+                            {item.message_content}
+                        </div>
+                        <p class="time">{item.time}</p>
+                    </div>
+                {/if}
+            {/each}
+        {/if}
     </div>
     <div class="sender" id="sender">
         <div class="input_group">

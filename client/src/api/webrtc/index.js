@@ -1,4 +1,5 @@
 import { iceServers } from './../../utils/iceServers.js'
+import isEmpty from './../../utils/is-empty'
 let sendChannel, localConnection, isInitiator;
 
 let socket, turnReady;
@@ -170,9 +171,24 @@ const receiveDataChromeFactory = () => {
     // var buf, count;
 
     return function onmessage(event) {
-        console.log('event>>>>>>>>>>>>>>>>', event)
         if (typeof event.data === 'string' || typeof localStorage !== "undefined") {
-            localStorage.setItem('message', event.data)
+            let message;
+            if (!isEmpty(localStorage.getItem('message'))) {
+                message = JSON.parse(localStorage.getItem('message'));
+            } else {
+                message = {}
+            }
+            let create_time = new Date();
+            let data = {
+                message_content: event.data,
+                time: create_time,
+                sender: "",
+            };
+            if (isEmpty(message) || isEmpty(message[room])) {
+                message[room] = [];
+            }
+            message[room].push(data);
+            localStorage.setItem("message", JSON.stringify(message));
         }
 
         // var data = new Uint8ClampedArray(event.data);

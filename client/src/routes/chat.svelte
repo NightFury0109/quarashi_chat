@@ -5,18 +5,21 @@
 <script>
     import { UserPlusIcon, LogOutIcon } from "svelte-feather-icons";
     import { onMount } from "svelte";
+    import LZString from "lz-string";
 
     import ChatArea from "$lib/components/chat/ChatArea.svelte";
-    import { connectSocket } from "./../api/webrtc";
+    import { connectSocket, connectRTC } from "./../api/webrtc";
+    import isEmpty from "../utils/is-empty";
 
     import avatar from "./../assets/img/avatar/avatar_em.png";
     // import avatar from "./../assets/img/avatar/avatar.png";
     import search_logo from "./../assets/img/search.svg";
-    import isEmpty from "../utils/is-empty";
-    import LZString from "lz-string";
+
     const { decompress } = LZString;
 
-    let search, userData;
+    let search,
+        userData,
+        room = "";
 
     onMount(() => {
         if (typeof localStorage !== "undefined") {
@@ -37,9 +40,11 @@
         }
     };
 
-    const connectWRTC = (e) => {
+    const connectWRTC = (roomID, e) => {
+        connectRTC();
         e.target.classList.add("active");
         connectSocket();
+        room = roomID;
     };
 </script>
 
@@ -84,7 +89,7 @@
             </div>
 
             <div class="user_list">
-                <div class="user" on:click={connectWRTC}>
+                <div class="user" on:click={(e) => connectWRTC("lionheart", e)}>
                     <div class="avatar_name">
                         <div
                             style="position: relative; width:44px; height:44px"
@@ -109,7 +114,9 @@
             </div>
         </div>
         <div class="col-lg-9 col-md-12 col-sm-12 col-12 right">
-            <ChatArea />
+            {#if !isEmpty(room)}
+                <ChatArea {room} />
+            {/if}
         </div>
     </div>
 </section>
