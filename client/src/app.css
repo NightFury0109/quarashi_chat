@@ -120,6 +120,9 @@ button:focus:not(:focus-visible) {
 .status.inactive {
 	background-color: grey;
 }
+.status.active {
+	background-color: greenyellow;
+}
 
 .messages .receive {
 	background-color: var(--background_color);

@@ -46,27 +46,6 @@ export const connectRTC = () => {
             'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
         );
     }
-
-
-    // local side
-
-    // Remote side
-    // remoteConnection = new RTCPeerConnection(iceServers);
-
-    // remoteConnection.onicecandidate = e => {
-    //     onIceCandidate(remoteConnection, e);
-    // };
-    // remoteConnection.ondatachannel = receiveChannelCallback;
-
-    // localConnection.createOffer().then(
-    //     gotDescription1,
-    //     onCreateSessionDescriptionError
-    // );
-
-    // // store infos
-    // localConnectionStore.set(localConnection)
-    // remoteConnectionStore.set(remoteConnection)
-    // receiveChannelStore.set(receiveChannel)
 }
 
 const createPeerConnection = (isInitiator) => {

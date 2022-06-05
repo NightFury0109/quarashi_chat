@@ -9,7 +9,8 @@
     import ChatArea from "$lib/components/chat/ChatArea.svelte";
     import { connectSocket } from "./../api/webrtc";
 
-    import avatar from "./../assets/img/avatar/avatar.png";
+    import avatar from "./../assets/img/avatar/avatar_em.png";
+    // import avatar from "./../assets/img/avatar/avatar.png";
     import search_logo from "./../assets/img/search.svg";
     import isEmpty from "../utils/is-empty";
     import LZString from "lz-string";
@@ -37,9 +38,7 @@
     };
 
     const connectWRTC = (e) => {
-        e.preventDefault();
         e.target.classList.add("active");
-        console.log(e.target)
         connectSocket();
     };
 </script>
@@ -57,13 +56,7 @@
             >
                 <div class="user_section">
                     <div class="avatar">
-                        <img
-                            src={avatar}
-                            alt="avatar"
-                            width="45"
-                            height="45"
-                            class="rounded-circle"
-                        />
+                        <img src={avatar} alt="avatar" class="rounded-circle" />
                         <div class="name">
                             <p>Hello</p>
                             <h6>{userData?.username || "unnamed"}</h6>
@@ -98,8 +91,6 @@
                         >
                             <img
                                 src={avatar}
-                                width="40"
-                                height="40"
                                 alt="avatar"
                                 class="rouned-circle"
                             />
@@ -112,27 +103,6 @@
                     </div>
                     <div class="time_ago">5M Ago</div>
                 </div>
-                <!-- <div class="user">
-                    <div class="avatar_name">
-                        <div
-                            style="position: relative; width:44px; height:44px"
-                        >
-                            <img
-                                src={avatar}
-                                width="40"
-                                height="40"
-                                alt="avatar"
-                                class="rouned-circle"
-                            />
-                            <div class="status inactive" />
-                        </div>
-                        <div class="user_name">
-                            <h6>Abraham</h6>
-                            <p>What’s up?</p>
-                        </div>
-                    </div>
-                    <div class="time_ago">5M Ago</div>
-                </div> -->
             </div>
             <div class="logout" on:click={logout}>
                 <LogOutIcon />
@@ -179,6 +149,9 @@
     .avatar img {
         border: 2px solid #22232e;
         padding: 4px;
+        background-color: cadetblue;
+        width: 45px;
+        height: 45px;
     }
     .avatar .name {
         margin-left: 8px;
@@ -275,6 +248,7 @@
         padding-right: 20px;
         border-bottom: 1px solid #22232e;
         align-items: center;
+        height: 85px;
     }
     .user:hover {
         background-color: #0b0b12;
@@ -287,12 +261,16 @@
         right: 1px;
         z-index: 999999;
         border-radius: 50%;
-    }
-    .status.active {
-        background-color: greenyellow;
+        border: 1px solid #0b0b12;
     }
     .avatar_name {
         display: flex;
+    }
+    .avatar_name img {
+        background-color: beige;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
     }
     .user_name {
         margin-left: 10px;
