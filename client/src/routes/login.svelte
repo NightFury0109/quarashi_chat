@@ -31,21 +31,33 @@
 			});
 		} else {
 			let result = login({ username: username, password: password });
-			if (result) {
-				addNotification({
-					position: "top-center",
-					removeAfter: 3000,
-					text: "Login success!",
-					type: "success",
-				});
-				window.location = "/chat";
-			} else {
-				addNotification({
-					position: "top-center",
-					removeAfter: 3000,
-					text: "Login is failed!",
-					type: "danger",
-				});
+			switch (result) {
+				case 0:
+					addNotification({
+						position: "top-center",
+						removeAfter: 3000,
+						text: "Login is failed!",
+						type: "danger",
+					});
+					break;
+				case 1:
+					addNotification({
+						position: "top-center",
+						removeAfter: 3000,
+						text: "Login success!",
+						type: "success",
+					});
+					window.location = "/chat";
+					break;
+				case 2:
+					addNotification({
+						position: "top-center",
+						removeAfter: 3000,
+						text: "Register the account",
+						type: "danger",
+					});
+					window.location = "/register";
+					break;
 			}
 		}
 	};
