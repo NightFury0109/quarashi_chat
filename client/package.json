@@ -22,7 +22,7 @@
     "axios": "^0.27.2",
     "cookie": "^0.4.1",
     "lz-string": "^1.4.4",
-    "socket.io-client": "2.0.4",
+    "socket.io-client": "2.4.1",
     "svelte-feather-icons": "^4.0.0",
     "svelte-notifications": "^0.9.95",
     "svelte-preprocess": "^4.10.6"

@@ -1,5 +1,7 @@
-import { iceServers } from './../../utils/iceServers.js'
+import { compress, decompress } from 'lz-string'
+
 import isEmpty from './../../utils/is-empty'
+import { iceServers } from './../../utils/iceServers.js'
 let sendChannel, localConnection, isInitiator;
 
 let socket, turnReady;
@@ -174,7 +176,7 @@ const receiveDataChromeFactory = () => {
         if (typeof event.data === 'string' || typeof localStorage !== "undefined") {
             let message;
             if (!isEmpty(localStorage.getItem('message'))) {
-                message = JSON.parse(localStorage.getItem('message'));
+                message = JSON.parse(decompress(localStorage.getItem('message')));
             } else {
                 message = {}
             }
@@ -188,7 +190,9 @@ const receiveDataChromeFactory = () => {
                 message[room] = [];
             }
             message[room].push(data);
-            localStorage.setItem("message", JSON.stringify(message));
+            localStorage.setItem(
+                "message",
+                compress(JSON.stringify(message))
         }
 
         // var data = new Uint8ClampedArray(event.data);
