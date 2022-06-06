@@ -1,6 +1,6 @@
 <script>
     import { compress, decompress } from "lz-string";
-    import { afterUpdate, onMount } from "svelte";
+    import { onMount } from "svelte";
     import { SendIcon } from "svelte-feather-icons";
     import { send_message } from "../../../api/message/message.js";
     import isEmpty from "../../../utils/is-empty.js";
@@ -25,7 +25,9 @@
             if (isEmpty(localStorage.getItem("message"))) {
                 message = {};
             } else {
-                message = JSON.parse(localStorage.getItem("message"));
+                message = JSON.parse(
+                    decompress(localStorage.getItem("message"))
+                );
             }
         }
     });
@@ -34,7 +36,7 @@
         if (isEmpty(localStorage.getItem("message"))) {
             message = {};
         } else {
-            message = JSON.parse(localStorage.getItem("message"));
+            message = JSON.parse(decompress(localStorage.getItem("message")));
         }
     }
 
@@ -125,7 +127,10 @@
                     //         </div>`;
                 }
                 message[`${room}`].push(data);
-                localStorage.setItem("message", JSON.stringify(message));
+                localStorage.setItem(
+                    "message",
+                    compress(JSON.stringify(message))
+                );
             }
             messge_content = "";
             content.style.height = 85 + "px";

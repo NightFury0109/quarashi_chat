@@ -30,7 +30,7 @@
     });
 
     $: if (typeof localStorage !== "undefined") {
-        userData = JSON.parse(decompress(localStorage.getItem("user_data")));
+        userData = JSON.parse(decompress(localStorage.getItem("user_token")));
     }
 
     const logout = () => {
