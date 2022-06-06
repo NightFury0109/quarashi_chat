@@ -6,6 +6,7 @@ let sendChannel, localConnection, isInitiator;
 
 let socket, turnReady;
 let room = "lionheart";
+let ip;
 
 export const connectSocket = () => {
     socket.emit('create or join', room)
@@ -18,7 +19,8 @@ export const connectRTC = () => {
     socket = io('http://localhost:5000');
 
     socket.on('ipaddr', (ipaddr) => {
-        console.log(ipaddr)
+        // console.log(ipaddr)
+        ip = ipaddr
     });
     socket.on('created', (room, clientId) => {
         console.log('created room', room, '- my client ID is ', clientId)
@@ -33,22 +35,16 @@ export const connectRTC = () => {
         console.log('room ', room, ' is full.')
     })
     socket.on('ready', () => {
-        console.log('socket is ready')
+        // console.log('socket is ready')
         createPeerConnection(isInitiator);
     })
     socket.on('log', () => {
         console.log.apply(console, array);
     })
     socket.on('message', (message) => {
-        console.log('Client received message:', message);
+        // console.log('Client received message:', message);
         signalingMessageCallback(message);
     })
-
-    if (location.hostname !== 'localhost' || location.hostname !== '127.0.0.1') {
-        requestTurn(
-            'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
-        );
-    }
 }
 
 export const send_message_content = (message_content) => {
@@ -57,11 +53,10 @@ export const send_message_content = (message_content) => {
 }
 
 const createPeerConnection = (isInitiator) => {
-    console.log('create peer connection')
+    // console.log('create peer connection')
     localConnection = new RTCPeerConnection(iceServers);
 
     localConnection.onicecandidate = (event) => {
-        console.log('icecandidate event:', event);
         if (event.candidate) {
             sendMessage({
                 type: 'candidate',
@@ -69,9 +64,10 @@ const createPeerConnection = (isInitiator) => {
                 id: event.candidate.sdpMid,
                 candidate: event.candidate.candidate
             });
-        } else {
-            console.log('End of candidates.');
         }
+        // else {
+        //     console.log('End of candidates.');
+        // }
     };
 
     if (isInitiator) {
@@ -81,7 +77,7 @@ const createPeerConnection = (isInitiator) => {
             return localConnection.setLocalDescription(offer);
         })
             .then(() => {
-                console.log('sending local desc:', localConnection.localDescription);
+                // console.log('sending local desc:', localConnection.localDescription);
                 sendMessage(localConnection.localDescription);
             })
             .catch(err => {
@@ -95,21 +91,21 @@ const createPeerConnection = (isInitiator) => {
             onDataChannelCreated(sendChannel);
         };
     }
-    console.log('DataChannel', sendChannel)
+    // console.log('DataChannel', sendChannel)
 }
 
 const signalingMessageCallback = (message) => {
-    if (typeof message === "null") {
+    if (typeof message === "null" || message === "") {
         console.log('message not received yet')
     } else {
         if (message.type === 'offer') {
-            console.log('Got offer. Sending answer to peer.');
+            // console.log('Got offer. Sending answer to peer.');
             localConnection.setRemoteDescription(new RTCSessionDescription(message), () => { },
                 logError);
             localConnection.createAnswer(onLocalSessionCreated, logError);
 
         } else if (message.type === 'answer') {
-            console.log('Got answer.');
+            // console.log('Got answer.');
             localConnection.setRemoteDescription(new RTCSessionDescription(message), () => { },
                 logError);
 
@@ -124,7 +120,7 @@ const signalingMessageCallback = (message) => {
 }
 
 const sendMessage = (message) => {
-    console.log('Client sending message: ', message);
+    // console.log('Client sending message: ', message);
     socket.emit('message', message);
 }
 
@@ -135,36 +131,37 @@ const onDataChannelCreated = (channel) => {
         receiveDataFirefoxFactory() : receiveDataChromeFactory();
 }
 
-const requestTurn = (turnURL) => {
-    let turnExists = false;
-    if (iceServers[0].urls.substr(0, 5) === 'turn:') {
-        turnExists = true;
-        turnReady = true;
-    }
-    if (!turnExists) {
-        //when iceserver is don't exist ask from server
-        console.log('Getting TURN server from ', turnURL);
-        let xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let turnServer = JSON.parse(xhr.responseText);
-                console.log('Got TURN server: ', turnServer);
-                iceServers.push({
-                    'urls': 'turn:' + turnServer.username + '@' + turnServer.turn,
-                    'credential': turnServer.password
-                });
-                turnReady = true;
-            }
-        };
-        xhr.open('GET', turnURL, true);
-        xhr.send();
-    }
-}
+// get turn server list from generate turn server
+// const requestTurn = (turnURL) => {
+//     let turnExists = false;
+//     if (iceServers[0].urls.substr(0, 5) === 'turn:') {
+//         turnExists = true;
+//         turnReady = true;
+//     }
+//     if (!turnExists) {
+//         //when iceserver is don't exist ask from server
+//         console.log('Getting TURN server from ', turnURL);
+//         let xhr = new XMLHttpRequest();
+//         xhr.onreadystatechange = () => {
+//             if (xhr.readyState === 4 && xhr.status === 200) {
+//                 let turnServer = JSON.parse(xhr.responseText);
+//                 console.log('Got TURN server: ', turnServer);
+//                 iceServers.push({
+//                     'urls': 'turn:' + turnServer.username + '@' + turnServer.turn,
+//                     'credential': turnServer.password
+//                 });
+//                 turnReady = true;
+//             }
+//         };
+//         xhr.open('GET', turnURL, true);
+//         xhr.send();
+//     }
+// }
 
 const onLocalSessionCreated = (desc) => {
-    console.log('local session created:', desc);
+    // console.log('local session created:', desc);
     localConnection.setLocalDescription(desc).then(() => {
-        console.log('sending local desc:', localConnection.localDescription);
+        // console.log('sending local desc:', localConnection.localDescription);
         sendMessage(localConnection.localDescription);
     }).catch(logError);
 }
