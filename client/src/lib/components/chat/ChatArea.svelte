@@ -1,9 +1,11 @@
 <script>
     import { compress, decompress } from "lz-string";
-    import { onMount } from "svelte";
+    import { afterUpdate, onMount } from "svelte";
     import { SendIcon } from "svelte-feather-icons";
+
     import { send_message } from "../../../api/message/message.js";
     import isEmpty from "../../../utils/is-empty.js";
+    import { difference2Parts } from "./../../../helper";
 
     export let room = "";
 
@@ -13,11 +15,28 @@
         chat_content,
         current_time,
         message,
-        username;
+        username,
+        diffs = [];
 
     $: setInterval(() => {
         current_time = new Date();
+    });
+
+    $: if (typeof localStorage !== "undefined") {
+        if (isEmpty(localStorage.getItem("message"))) {
+            message = {};
+        } else {
+            message = JSON.parse(decompress(localStorage.getItem("message")));
+        }
+        username = JSON.parse(decompress(localStorage.getItem("user_token")))[
+            "username"
+        ];
+    }
+
+    onMount(() => {
         if (typeof document !== "undefined" && room !== "") {
+            content = document.getElementById("sender");
+            text = document.getElementById("text_area");
             chat_content = document.getElementById("messages");
             chat_content.scrollTop = chat_content.scrollHeight + 100;
         }
@@ -28,26 +47,32 @@
                 message = JSON.parse(
                     decompress(localStorage.getItem("message"))
                 );
+                // message[room].map((item) => {
+                //     diffs.push(difference2Parts(current_time - item.time));
+                // });
             }
         }
     });
 
-    $: if (typeof localStorage !== "undefined") {
-        if (isEmpty(localStorage.getItem("message"))) {
-            message = {};
-        } else {
-            message = JSON.parse(decompress(localStorage.getItem("message")));
-        }
-    }
-
-    onMount(() => {
-        if (typeof document !== "undefined") {
+    afterUpdate(() => {
+        if (typeof document !== "undefined" && room !== "") {
             content = document.getElementById("sender");
             text = document.getElementById("text_area");
+            chat_content = document.getElementById("messages");
+            chat_content.scrollTop = chat_content.scrollHeight + 100;
         }
-        username = JSON.parse(decompress(localStorage.getItem("user_token")))[
-            "username"
-        ];
+        if (typeof localStorage !== "undefined") {
+            if (isEmpty(localStorage.getItem("message"))) {
+                message = {};
+            } else {
+                message = JSON.parse(
+                    decompress(localStorage.getItem("message"))
+                );
+                // message[room].map((item) => {
+                //     diffs.push(difference2Parts(current_time - item.time));
+                // });
+            }
+        }
     });
 
     const detectShiftEnter = (e) => {
@@ -62,46 +87,10 @@
         }
     };
 
-    let difference2Parts = (milliseconds) => {
-        const secs = Math.floor(Math.abs(milliseconds) / 1000);
-        const mins = Math.floor(secs / 60);
-        const hours = Math.floor(mins / 60);
-        const days = Math.floor(hours / 24);
-        const millisecs = Math.floor(Math.abs(milliseconds)) % 1000;
-        const multiple = (term, n) => (n !== 1 ? `${n} ${term}s` : `1 ${term}`);
-
-        return {
-            days: days,
-            hours: hours % 24,
-            hoursTotal: hours,
-            minutesTotal: mins,
-            minutes: mins % 60,
-            seconds: secs % 60,
-            secondsTotal: secs,
-            milliSeconds: millisecs,
-            get diffStr() {
-                return `${multiple(`day`, this.days)}, ${multiple(
-                    `hour`,
-                    this.hours
-                )}, ${multiple(`minute`, this.minutes)} and ${multiple(
-                    `second`,
-                    this.seconds
-                )}`;
-            },
-            get diffStrMs() {
-                return `${this.diffStr.replace(` and`, `, `)} and ${multiple(
-                    `millisecond`,
-                    this.milliSeconds
-                )}`;
-            },
-        };
-    };
-
     const sendMessage = () => {
         if (messge_content !== "" && room !== "") {
             send_message(messge_content);
             let create_time = new Date();
-            let diffs = difference2Parts(current_time - create_time);
             if (typeof localStorage !== "undefined") {
                 let sender = JSON.parse(
                     decompress(localStorage.getItem("user_token"))
@@ -113,18 +102,6 @@
                 };
                 if (isEmpty(message[`${room}`])) {
                     message[`${room}`] = [];
-                } else {
-                    // <p class='time'>${
-                    //                 diffs.hoursTotal > 0
-                    //                     ? diffs.hoursTotal + "H"
-                    //                     : ""
-                    //             } ${diffs.minutesTotal + "M ago"}
-                    //             </p>\
-                    // chat_content.innerHTML += `<div class='send'>\
-                    //             <div>${messge_content}</div>\
-                    //             <p class='time'>${current_time.toISOString()}\
-                    //             </p>\
-                    //         </div>`;
                 }
                 message[`${room}`].push(data);
                 localStorage.setItem(
@@ -142,7 +119,7 @@
 <div class="chat_area">
     <div class="messages" id="messages">
         {#if !isEmpty(message)}
-            {#each message[`${room}`] as item}
+            {#each message[`${room}`] as item, index}
                 {#if item.sender === username}
                     <div class="send">
                         <div>
@@ -155,7 +132,12 @@
                         <div>
                             {item.message_content}
                         </div>
-                        <p class="time">{item.time}</p>
+                        <p class="time">
+                            {item.time}
+                            <!-- ${diffs[index].hoursTotal > 0
+                                ? diffs[index].hoursTotal + "H"
+                                : ""} ${diffs[index].minutesTotal + "M ago"} -->
+                        </p>
                     </div>
                 {/if}
             {/each}
