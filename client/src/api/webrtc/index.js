@@ -51,6 +51,11 @@ export const connectRTC = () => {
     }
 }
 
+export const send_message_content = (message_content) => {
+    console.log('sending_data_through_peer_connection', message_content)
+    sendChannel.send(message_content)
+}
+
 const createPeerConnection = (isInitiator) => {
     console.log('create peer connection')
     localConnection = new RTCPeerConnection(iceServers);
@@ -93,19 +98,19 @@ const createPeerConnection = (isInitiator) => {
     console.log('DataChannel', sendChannel)
 }
 
-function signalingMessageCallback(message) {
+const signalingMessageCallback = (message) => {
     if (typeof message === "null") {
         console.log('message not received yet')
     } else {
         if (message.type === 'offer') {
             console.log('Got offer. Sending answer to peer.');
-            localConnection.setRemoteDescription(new RTCSessionDescription(message), function () { },
+            localConnection.setRemoteDescription(new RTCSessionDescription(message), () => { },
                 logError);
             localConnection.createAnswer(onLocalSessionCreated, logError);
 
         } else if (message.type === 'answer') {
             console.log('Got answer.');
-            localConnection.setRemoteDescription(new RTCSessionDescription(message), function () { },
+            localConnection.setRemoteDescription(new RTCSessionDescription(message), () => { },
                 logError);
 
         } else if (message.type === 'candidate') {
@@ -140,7 +145,7 @@ const requestTurn = (turnURL) => {
         //when iceserver is don't exist ask from server
         console.log('Getting TURN server from ', turnURL);
         let xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = () => {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 let turnServer = JSON.parse(xhr.responseText);
                 console.log('Got TURN server: ', turnServer);
@@ -172,7 +177,7 @@ const onSendChannelStateChange = () => {
 const receiveDataChromeFactory = () => {
     // var buf, count;
 
-    return function onmessage(event) {
+    return onmessage = (event) => {
         if (typeof event.data === 'string' || typeof localStorage !== "undefined") {
             let message;
             if (!isEmpty(localStorage.getItem('message'))) {
@@ -270,7 +275,3 @@ const logError = (err) => {
     }
 }
 
-export const send_message_content = (message_content) => {
-    console.log('sending_data_through_peer_connection', message_content)
-    sendChannel.send(message_content)
-}
