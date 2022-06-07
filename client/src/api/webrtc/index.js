@@ -3,7 +3,7 @@ let compress = LZString.compress;
 let decompress = LZString.decompress;
 
 import isEmpty from './../../utils/is-empty'
-import { iceServers } from './../../utils/iceServers.js'
+import { iceServers, ownIceServer } from './../../utils/iceServers.js'
 let sendChannel, localConnection, isInitiator;
 
 let socket, turnReady;
@@ -56,7 +56,7 @@ export const send_message_content = (message_content) => {
 
 const createPeerConnection = (isInitiator) => {
     // console.log('create peer connection')
-    localConnection = new RTCPeerConnection(iceServers);
+    localConnection = new RTCPeerConnection(ownIceServer);
 
     localConnection.onicecandidate = (event) => {
         if (event.candidate) {

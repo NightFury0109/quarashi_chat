@@ -6,5 +6,7 @@ export const iceServers =
     }];
 
 export const ownIceServer = [{
-    urls: ''
+    urls: 'http://172.31.27.238',
+    username: 'jovan',
+    credential: '123456'
 }]
