@@ -1,5 +1,7 @@
 <script>
-    import { compress, decompress } from "lz-string";
+    import LZString from "lz-string";
+    let compress = LZString.compress;
+    let decompress = LZString.decompress;
     import { afterUpdate, onMount } from "svelte";
     import { SendIcon } from "svelte-feather-icons";
 
