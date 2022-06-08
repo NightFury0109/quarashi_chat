@@ -97,7 +97,7 @@ const createPeerConnection = (isInitiator) => {
 }
 
 const signalingMessageCallback = (message) => {
-    if (typeof message === "null" || message === "") {
+    if (typeof message === "null" || isEmpty(message)) {
         console.log('message not received yet')
     } else {
         if (message.type === 'offer') {

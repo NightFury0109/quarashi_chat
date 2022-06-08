@@ -62,6 +62,7 @@
     });
 
     afterUpdate(() => {
+        console.log(11111)
         if (typeof document !== "undefined" && room !== "") {
             content = document.getElementById("sender");
             text = document.getElementById("text_area");
