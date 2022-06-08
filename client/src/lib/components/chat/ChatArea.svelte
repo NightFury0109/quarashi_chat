@@ -22,11 +22,11 @@
 
     $: setInterval(() => {
         current_time = new Date();
-        if (isEmpty(localStorage.getItem("message"))) {
-            message = {};
-        } else {
-            message = JSON.parse(decompress(localStorage.getItem("message")));
-        }
+        // if (isEmpty(localStorage.getItem("message"))) {
+        //     message = {};
+        // } else {
+        //     message = JSON.parse(decompress(localStorage.getItem("message")));
+        // }
     });
 
     $: if (typeof localStorage !== "undefined") {
@@ -62,7 +62,6 @@
     });
 
     afterUpdate(() => {
-        console.log(11111)
         if (typeof document !== "undefined" && room !== "") {
             content = document.getElementById("sender");
             text = document.getElementById("text_area");
