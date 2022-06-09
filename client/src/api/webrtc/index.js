@@ -31,6 +31,7 @@ export const connectRTC = () => {
     socket.on('joined', (room, clientId) => {
         console.log('This Peer has joined room ', room, 'with clientID', clientId)
         isInitiator = false;
+        createPeerConnection_Sturn();
         createPeerConnection(isInitiator)
     })
     socket.on('full', () => {
@@ -48,12 +49,27 @@ export const connectRTC = () => {
     })
 }
 
-// chat with turn server(it will be case of failed of stun+peer connection)
 export const send_message_content = (message_content) => {
     console.log('sending_data_through_peer_connection', message_content)
     sendChannel.send(message_content)
 }
+//connect the peer connection with stun server
+const createPeerConnection_Sturn = () => {
+    const configuration = { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
+    const peerConnection = new RTCPeerConnection(configuration);
+    signalingChannel.addEventListener('message', async message => {
+        if (message.answer) {
+            const remoteDesc = new RTCSessionDescription(message.answer);
+            await peerConnection.setRemoteDescription(remoteDesc);
+        }
+    });
+    const offer = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(offer);
+    signalingChannel.send({ 'offer': offer });
+}
 
+
+// chat with turn server(it will be case of failed of stun+peer connection)
 const createPeerConnection = (isInitiator) => {
     // console.log('create peer connection')
     localConnection = new RTCPeerConnection(ownIceServer);
