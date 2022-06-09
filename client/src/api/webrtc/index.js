@@ -37,7 +37,6 @@ export const connectRTC = () => {
         console.log('room ', room, ' is full.')
     })
     socket.on('ready', () => {
-        // console.log('socket is ready')
         createPeerConnection(isInitiator);
     })
     socket.on('log', () => {
@@ -49,6 +48,7 @@ export const connectRTC = () => {
     })
 }
 
+// chat with turn server(it will be case of failed of stun+peer connection)
 export const send_message_content = (message_content) => {
     console.log('sending_data_through_peer_connection', message_content)
     sendChannel.send(message_content)
