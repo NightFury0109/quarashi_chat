@@ -61,6 +61,7 @@ const createPeerConnection_Sturn = () => {
         if (message.answer) {
             const remoteDesc = new RTCSessionDescription(message.answer);
             await peerConnection.setRemoteDescription(remoteDesc);
+            console.log(remoteDesc)
         }
     });
     const offer = await peerConnection.createOffer();
