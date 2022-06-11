@@ -48,6 +48,7 @@ export const connectRTC = () => {
         signalingMessageCallback(message);
         // console.log('Client received message:', message);
     })
+    console.log('here\'s ip', ip)
 }
 
 export const send_message_content = (message_content) => {
