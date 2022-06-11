@@ -3,7 +3,7 @@ let compress = LZString.compress;
 let decompress = LZString.decompress;
 
 import isEmpty from './../../utils/is-empty'
-import { iceServers, ownIceServer } from './../../utils/iceServers.js'
+import { iceServers } from './../../utils/iceServers.js'
 let sendChannel, localConnection, isInitiator;
 
 let socket, turnReady;
@@ -31,13 +31,14 @@ export const connectRTC = () => {
     socket.on('joined', (room, clientId) => {
         console.log('This Peer has joined room ', room, 'with clientID', clientId)
         isInitiator = false;
-        createPeerConnection_Sturn();
+        // createPeerConnectionSturn();
         createPeerConnection(isInitiator)
     })
     socket.on('full', () => {
         console.log('room ', room, ' is full.')
     })
     socket.on('ready', () => {
+        // createPeerConnectionSturn();
         createPeerConnection(isInitiator);
     })
     socket.on('log', () => {
@@ -50,32 +51,49 @@ export const connectRTC = () => {
 }
 
 export const send_message_content = (message_content) => {
-    console.log('sending_data_through_peer_connection', message_content)
+    // console.log('sending_data_through_peer_connection', message_content)
     sendChannel.send(message_content)
 }
+
 //connect the peer connection with stun server
-const createPeerConnection_Sturn = () => {
-    const configuration = { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
-    const peerConnection = new RTCPeerConnection(configuration);
-    signalingChannel.addEventListener('message', async message => {
-        if (message.answer) {
-            const remoteDesc = new RTCSessionDescription(message.answer);
-            await peerConnection.setRemoteDescription(remoteDesc);
-            console.log(remoteDesc)
-        }
-    });
-    const offer = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(offer);
-    signalingChannel.send({ 'offer': offer });
-}
+// const createPeerConnectionSturn = async () => {
+//     const signalingChannel = new SignalingChannel(remoteClientId);
+//     const configuration = { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
+//     const peerConnection = new RTCPeerConnection(configuration);
+//     signalingChannel.addEventListener('message', async message => {
+//         if (message.answer) {
+//             const remoteDesc = new RTCSessionDescription(message.answer);
+//             await peerConnection.setRemoteDescription(remoteDesc);
+//             console.log(remoteDesc)
+//         }
+//     });
+//     const offer = await peerConnection.createOffer();
+//     await peerConnection.setLocalDescription(offer);
+//     signalingChannel.send({ 'offer': offer });
+// }
+
+
+
 
 
 // chat with turn server(it will be case of failed of stun+peer connection)
 const createPeerConnection = (isInitiator) => {
     // console.log('create peer connection')
-    localConnection = new RTCPeerConnection(ownIceServer);
+    localConnection = new RTCPeerConnection(iceServers);
 
     localConnection.onicecandidate = (event) => {
+        console.log('event.candidate', event.candidate)
+        // check the turn or sturn server is working
+        // if(event.candidate.type == "srflx"){
+        //     console.log("The STUN server is reachable!");
+        //     console.log(`   Your Public IP Address is: ${event.candidate.address}`);
+        // }
+    
+        // // If a relay candidate was found, notify that the TURN server works!
+        // if(event.candidate.type == "relay"){
+        //     console.log("The TURN server is reachable !");
+        // }
+
         if (event.candidate) {
             sendMessage({
                 type: 'candidate',
@@ -194,13 +212,14 @@ const receiveDataChromeFactory = () => {
     // var buf, count;
 
     return onmessage = (event) => {
-        if (typeof event.data === 'string' || typeof localStorage !== "undefined") {
+        if (typeof event.data === 'string' && typeof localStorage !== "undefined") {
             let message;
-            if (!isEmpty(localStorage.getItem('message'))) {
-                message = JSON.parse(decompress(localStorage.getItem('message')));
+            if (!isEmpty(localStorage.getItem('peer_chat_content'))) {
+                message = JSON.parse(decompress(localStorage.getItem('peer_chat_content')));
             } else {
                 message = {}
             }
+            console.log('event.data', event.data, typeof event.data)
             let create_time = new Date();
             let data = {
                 message_content: event.data,
@@ -212,7 +231,7 @@ const receiveDataChromeFactory = () => {
             }
             message[room].push(data);
             localStorage.setItem(
-                "message",
+                "peer_chat_content",
                 compress(JSON.stringify(message)))
         }
 
@@ -234,10 +253,10 @@ const receiveDataFirefoxFactory = () => {
     // var count, total, parts;
 
     return onmessage = (event) => {
-        if (typeof event.data === 'string' || typeof localStorage !== "undefined") {
+        if (typeof event.data === 'string' && typeof localStorage !== "undefined") {
             let message;
-            if (!isEmpty(localStorage.getItem('message'))) {
-                message = JSON.parse(decompress(localStorage.getItem('message')));
+            if (!isEmpty(localStorage.getItem('peer_chat_content'))) {
+                message = JSON.parse(decompress(localStorage.getItem('peer_chat_content')));
             } else {
                 message = {}
             }
@@ -252,7 +271,7 @@ const receiveDataFirefoxFactory = () => {
             }
             message[room].push(data);
             localStorage.setItem(
-                "message",
+                "peer_chat_content",
                 compress(JSON.stringify(message)))
         }
 
