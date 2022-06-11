@@ -31,22 +31,22 @@ export const connectRTC = () => {
     socket.on('joined', (room, clientId) => {
         console.log('This Peer has joined room ', room, 'with clientID', clientId)
         isInitiator = false;
-        // createPeerConnectionSturn();
         createPeerConnection(isInitiator)
+        // createPeerConnectionSturn();
     })
     socket.on('full', () => {
         console.log('room ', room, ' is full.')
     })
     socket.on('ready', () => {
-        // createPeerConnectionSturn();
         createPeerConnection(isInitiator);
+        // createPeerConnectionSturn();
     })
     socket.on('log', () => {
         console.log.apply(console, array);
     })
     socket.on('message', (message) => {
-        // console.log('Client received message:', message);
         signalingMessageCallback(message);
+        // console.log('Client received message:', message);
     })
 }
 
@@ -56,6 +56,7 @@ export const send_message_content = (message_content) => {
 }
 
 //connect the peer connection with stun server
+
 // const createPeerConnectionSturn = async () => {
 //     const signalingChannel = new SignalingChannel(remoteClientId);
 //     const configuration = { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
@@ -78,17 +79,17 @@ export const send_message_content = (message_content) => {
 
 // chat with turn server(it will be case of failed of stun+peer connection)
 const createPeerConnection = (isInitiator) => {
-    // console.log('create peer connection')
     localConnection = new RTCPeerConnection(iceServers);
 
     localConnection.onicecandidate = (event) => {
         console.log('event.candidate', event.candidate)
+
         // check the turn or sturn server is working
         // if(event.candidate.type == "srflx"){
         //     console.log("The STUN server is reachable!");
         //     console.log(`   Your Public IP Address is: ${event.candidate.address}`);
         // }
-    
+
         // // If a relay candidate was found, notify that the TURN server works!
         // if(event.candidate.type == "relay"){
         //     console.log("The TURN server is reachable !");
@@ -102,9 +103,6 @@ const createPeerConnection = (isInitiator) => {
                 candidate: event.candidate.candidate
             });
         }
-        // else {
-        //     console.log('End of candidates.');
-        // }
     };
 
     if (isInitiator) {
@@ -114,16 +112,13 @@ const createPeerConnection = (isInitiator) => {
             return localConnection.setLocalDescription(offer);
         })
             .then(() => {
-                // console.log('sending local desc:', localConnection.localDescription);
                 sendMessage(localConnection.localDescription);
             })
             .catch(err => {
                 console.log(err)
             });
-
     } else {
         localConnection.ondatachannel = (event) => {
-            console.log('ondatachannel:', event.channel);
             sendChannel = event.channel;
             onDataChannelCreated(sendChannel);
         };
@@ -133,7 +128,8 @@ const createPeerConnection = (isInitiator) => {
 
 const signalingMessageCallback = (message) => {
     if (typeof message === "null" || isEmpty(message)) {
-        console.log('message not received yet')
+        console.log('message not received yet from socket server')
+        return 0;
     } else {
         if (message.type === 'offer') {
             // console.log('Got offer. Sending answer to peer.');
@@ -209,7 +205,6 @@ const onSendChannelStateChange = () => {
 }
 
 const receiveDataChromeFactory = () => {
-    // var buf, count;
 
     return onmessage = (event) => {
         if (typeof event.data === 'string' && typeof localStorage !== "undefined") {
@@ -235,6 +230,9 @@ const receiveDataChromeFactory = () => {
                 compress(JSON.stringify(message)))
         }
 
+        // send the file.
+        // var buf, count;
+
         // var data = new Uint8ClampedArray(event.data);
         // buf.set(data, count);
 
@@ -250,7 +248,6 @@ const receiveDataChromeFactory = () => {
 }
 
 const receiveDataFirefoxFactory = () => {
-    // var count, total, parts;
 
     return onmessage = (event) => {
         if (typeof event.data === 'string' && typeof localStorage !== "undefined") {
@@ -274,6 +271,9 @@ const receiveDataFirefoxFactory = () => {
                 "peer_chat_content",
                 compress(JSON.stringify(message)))
         }
+
+        // send the file in firefox
+        // var count, total, parts;
 
         // parts.push(event.data);
         // count += event.data.size;

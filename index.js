@@ -21,8 +21,6 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     // convenience function to log server messages on the client
     socket.on('message', (message) => {
-        // console.log('Client said: ', message);
-        // for a real app, would be room-only (not broadcast)
         socket.broadcast.emit('message', message);
     });
 
@@ -33,16 +31,17 @@ io.on('connection', (socket) => {
 
         if (numClients === 0) {
             socket.join(room);
-            // console.log('Client ID ' + socket.id + ' created room ' + room);
             socket.emit('created', room, socket.id);
+            // console.log('Client ID ' + socket.id + ' created room ' + room);
         } else if (numClients === 1) {
-            // console.log('Client ID ' + socket.id + ' joined room ' + room);
             io.sockets.in(room).emit('join', room);
             socket.join(room);
             socket.emit('joined', room, socket.id);
             io.sockets.in(room).emit('ready', room);
             socket.broadcast.emit('ready', room);
-        } else { // max two clients
+            // console.log('Client ID ' + socket.id + ' joined room ' + room);
+        } else {
+            // max two clients
             socket.emit('full', room);
         }
     });
@@ -58,10 +57,10 @@ io.on('connection', (socket) => {
         }
     });
 
-    // socket.on('disconnect', function (reason) {
-    //     console.log(`Peer or server disconnected. Reason: ${reason}.`);
-    //     socket.broadcast.emit('bye');
-    // });
+    socket.on('disconnect', function (reason) {
+        console.log(`Peer or server disconnected. Reason: ${reason}.`);
+        socket.broadcast.emit('bye');
+    });
 
     // socket.on('bye', function (room) {
     //     console.log(`Peer said bye on room ${room}.`);
@@ -71,4 +70,3 @@ io.on('connection', (socket) => {
 httpServer.listen(5000, () => {
     console.log(`Server started on port 5000 :)`);
 });
-
