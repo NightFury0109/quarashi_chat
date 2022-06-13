@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
             socket.emit('created', room, socket.id);
             // console.log('Client ID ' + socket.id + ' created room ' + room);
         } else if (numClients === 1) {
-            io.sockets.in(room).emit('join', room);
+            // io.sockets.in(room).emit('join', room);
             socket.join(room);
             socket.emit('joined', room, socket.id);
             io.sockets.in(room).emit('ready', room);
@@ -62,9 +62,9 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('bye');
     });
 
-    // socket.on('bye', function (room) {
-    //     console.log(`Peer said bye on room ${room}.`);
-    // });
+    socket.on('bye', function (room) {
+        console.log(`Peer said bye on room ${room}.`);
+    });
 })
 
 httpServer.listen(5000, () => {
