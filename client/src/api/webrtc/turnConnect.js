@@ -53,12 +53,6 @@ export const sendMessage_turn = (message_content) => {
     sendChannel.send(message_content)
 }
 
-// var configuration = {
-//     'iceServers': [{
-//         'urls': 'stun:stun.l.google.com:19302'
-//     }]
-// };
-
 
 // chat with turn server(it will be case of failed of stun+peer connection)
 const createPeerConnection = (isInitiator) => {
@@ -69,15 +63,15 @@ const createPeerConnection = (isInitiator) => {
         console.log('event.candidate', event.candidate)
 
         // check the turn or sturn server is working
-        // if (event.candidate.type == "srflx") {
-        //     console.log("The STUN server is reachable!");
-        //     console.log(`   Your Public IP Address is: ${event.candidate.address}`);
-        // }
+        if (event.candidate.type == "srflx") {
+            console.log("The STUN server is reachable!");
+            console.log(`Your Public IP Address is: ${event.candidate.address}`);
+        }
 
-        // // If a relay candidate was found, notify that the TURN server works!
-        // if (event.candidate.type == "relay") {
-        //     console.log("The TURN server is reachable !");
-        // }
+        // If a relay candidate was found, notify that the TURN server works!
+        if (event.candidate.type == "relay") {
+            console.log("The TURN server is reachable !");
+        }
 
         if (event.candidate) {
             sendMessage({
