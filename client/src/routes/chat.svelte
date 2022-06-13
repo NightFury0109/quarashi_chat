@@ -15,7 +15,6 @@
     // import avatar from "./../assets/img/avatar/avatar.png";
     import search_logo from "./../assets/img/search.svg";
 
-
     let search,
         userData,
         room = "";
@@ -29,7 +28,9 @@
     });
 
     $: if (typeof localStorage !== "undefined") {
-        userData = JSON.parse(LZString.decompress(localStorage.getItem("user_token")));
+        userData = JSON.parse(
+            LZString.decompress(localStorage.getItem("user_token"))
+        );
     }
 
     const logout = () => {

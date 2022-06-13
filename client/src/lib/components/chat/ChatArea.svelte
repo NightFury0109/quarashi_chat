@@ -25,16 +25,13 @@
         if (isEmpty(localStorage.getItem("peer_chat_content"))) {
             message = {};
         } else {
-            message = JSON.parse(decompress(localStorage.getItem("peer_chat_content")));
+            message = JSON.parse(
+                decompress(localStorage.getItem("peer_chat_content"))
+            );
         }
     });
 
     $: if (typeof localStorage !== "undefined") {
-        if (isEmpty(localStorage.getItem("peer_chat_content"))) {
-            message = {};
-        } else {
-            message = JSON.parse(decompress(localStorage.getItem("peer_chat_content")));
-        }
         // console.log(message)
         username = JSON.parse(decompress(localStorage.getItem("user_token")))[
             "username"
@@ -55,8 +52,6 @@
                 message = JSON.parse(
                     decompress(localStorage.getItem("peer_chat_content"))
                 );
-
-                console.log('message', message)
 
                 // message[room].map((item) => {
                 //     diffs.push(difference2Parts(current_time - item.time));

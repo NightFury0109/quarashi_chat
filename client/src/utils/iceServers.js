@@ -11,16 +11,18 @@
 //     }
 // ];
 
-export const iceServers = [
-    {
-        urls: 'stun:stun.anyfirewall.com:443?transport=tcp'
-    },
-    {
-        urls: 'turn:turn.anyfirewall.com:443?transport=tcp',
-        username: 'webrtc',
-        credential: 'webrtc',
-    }
-]
+export const iceServers = {
+    'iceServers': [
+        {
+            urls: 'stun:stun.anyfirewall.com:443?transport=tcp'
+        },
+        {
+            urls: 'turn:turn.anyfirewall.com:443?transport=tcp',
+            username: 'webrtc',
+            credential: 'webrtc',
+        }
+    ]
+}
 
 // urls: 'http://172.31.27.238',
 
