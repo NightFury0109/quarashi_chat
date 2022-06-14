@@ -4,6 +4,7 @@ let decompress = LZString.decompress;
 
 import isEmpty from '../../utils/is-empty'
 import { iceServers } from '../../utils/iceServers.js'
+import { connectionSecure } from './../../store'
 
 let sendChannel, localConnection, isInitiator;
 
@@ -11,7 +12,7 @@ let socket, turnReady;
 let room = "lionheart";
 let ip;
 
-export const turnConnect = () => {
+export const coturnConnect = () => {
     socket = io('http://localhost:5000');
 
     socket.on('ipaddr', (ipaddr) => {
@@ -42,33 +43,43 @@ export const turnConnect = () => {
     })
 }
 
-export const connectSocket_turn = () => {
+export const connectSocket_coturn = () => {
     socket.emit('create or join', room)
     socket.emit('ipaddr');
 }
 
-export const sendMessage_turn = (message_content) => {
+export const sendMessage_coturn = (message_content) => {
     sendChannel.send(message_content)
 }
-
+let i = 0
 const createPeerConnection = (isInitiator) => {
     iceServers == null
     localConnection = new RTCPeerConnection(iceServers);
 
     localConnection.onicecandidate = (event) => {
-        console.log('event.candidate', event.candidate)
-
-        // check the turn or sturn server is working
-        if (!isEmpty(event.candidate)) {
+        i++
+        console.log(i)
+        console.log('event>>>>>>>>', event)
+        // check the turn or stun server is working
+        if (typeof event.candidate !== "null") {
+            console.log('event.candidate>>><<', event.candidate)
+            let connectSecure;
+            connectionSecure.subscribe(secure => {
+                connectSecure = secure
+            })
             if (event.candidate.type == "srflx") {
                 console.log("The STUN server is reachable!");
                 console.log(`Your Public IP Address is: ${event.candidate.address}`);
+                connectSecure[room] = true
             }
 
             // If a relay candidate was found, notify that the TURN server works!
             if (event.candidate.type == "relay") {
                 console.log("The TURN server is reachable !");
+                connectSecure[room] = false
             }
+            console.log('connectSecure>>>>>>', connectSecure)
+            connectionSecure.set(connectSecure)
         }
 
         if (event.candidate) {
@@ -99,7 +110,6 @@ const createPeerConnection = (isInitiator) => {
             onDataChannelCreated(sendChannel);
         };
     }
-    // console.log('DataChannel', sendChannel)
 }
 
 const signalingMessageCallback = (message) => {
@@ -168,7 +178,6 @@ const onDataChannelCreated = (channel) => {
 // }
 
 const onLocalSessionCreated = (desc) => {
-    // console.log('local session created:', desc);
     localConnection.setLocalDescription(desc).then(() => {
         // console.log('sending local desc:', localConnection.localDescription);
         sendMessage(localConnection.localDescription);

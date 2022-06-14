@@ -14,6 +14,7 @@
     import avatar from "./../assets/img/avatar/avatar_em.png";
     // import avatar from "./../assets/img/avatar/avatar.png";
     import search_logo from "./../assets/img/search.svg";
+    import { connectionSecure } from "./../store";
 
     let search,
         userData,
@@ -31,6 +32,7 @@
         userData = JSON.parse(
             LZString.decompress(localStorage.getItem("user_token"))
         );
+        console.log("$connectionSecure", $connectionSecure);
     }
 
     const logout = () => {
@@ -106,7 +108,13 @@
                             <p>What’s up?</p>
                         </div>
                     </div>
-                    <div class="time_ago">5M Ago</div>
+                    <div class="time_ago">
+                        {#if $connectionSecure && $connectionSecure[room]}
+                            true
+                            <br />
+                        {/if}
+                        5M Ago
+                    </div>
                 </div>
             </div>
             <div class="logout" on:click={logout}>
@@ -290,6 +298,9 @@
         font-size: 12px;
         color: var(--grey_color);
         margin-bottom: 0px;
+    }
+    .time_ago {
+        font-size: 12px;
     }
 
     .right {

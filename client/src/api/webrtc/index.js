@@ -1,12 +1,12 @@
 import isEmpty from './../../utils/is-empty'
 
 import { p2pConnect } from './p2pConnect'
-import { turnConnect, connectSocket_turn, sendMessage_turn } from './coturnConnect'
+import { coturnConnect, connectSocket_coturn, sendMessage_coturn } from './coturnConnect'
 let connect_way;
 
 export const connectSocket = () => {
-    if (connect_way == "turn") {
-        connectSocket_turn()
+    if (connect_way == "coturn") {
+        connectSocket_coturn()
     }
 }
 
@@ -16,14 +16,14 @@ export const connectRTC = () => {
     //     connect_way = "p2p"
     // } catch(err) {
     //     console.log(err)
-    turnConnect()
-    connect_way = "turn"
+    coturnConnect()
+    connect_way = "coturn"
     // }
 }
 
 export const send_message_content = (message_content) => {
-    if (connect_way == "turn") {
-        sendMessage_turn(message_content)
+    if (connect_way == "coturn") {
+        sendMessage_coturn(message_content)
     }
 }
 
