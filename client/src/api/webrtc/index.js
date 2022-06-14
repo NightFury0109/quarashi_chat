@@ -1,7 +1,7 @@
 import isEmpty from './../../utils/is-empty'
 
 import { p2pConnect } from './p2pConnect'
-import { turnConnect, connectSocket_turn, sendMessage_turn } from './turnConnect'
+import { turnConnect, connectSocket_turn, sendMessage_turn } from './coturnConnect'
 let connect_way;
 
 export const connectSocket = () => {
