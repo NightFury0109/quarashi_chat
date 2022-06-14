@@ -39,7 +39,6 @@ export const coturnConnect = () => {
     })
     socket.on('message', (message) => {
         signalingMessageCallback(message);
-        // console.log('Client received message:', message);
     })
 }
 
@@ -51,18 +50,19 @@ export const connectSocket_coturn = () => {
 export const sendMessage_coturn = (message_content) => {
     sendChannel.send(message_content)
 }
-let i = 0
+
 const createPeerConnection = (isInitiator) => {
     iceServers == null
     localConnection = new RTCPeerConnection(iceServers);
 
     localConnection.onicecandidate = (event) => {
-        i++
-        console.log(i)
-        console.log('event>>>>>>>>', event)
+        console.log(
+            "The ICE candidate (transport address: '" +
+            event.candidate.candidate +
+            "') has been added to this connection."
+        );
         // check the turn or stun server is working
-        if (typeof event.candidate !== "null") {
-            console.log('event.candidate>>><<', event.candidate)
+        if (event.candidate !== null) {
             let connectSecure;
             connectionSecure.subscribe(secure => {
                 connectSecure = secure
@@ -117,6 +117,7 @@ const signalingMessageCallback = (message) => {
         console.log('message not received yet from socket server')
         return 0;
     } else {
+        console.log('message>>>>>>>>>', message)
         if (message.type === 'offer') {
             // console.log('Got offer. Sending answer to peer.');
             localConnection.setRemoteDescription(new RTCSessionDescription(message), () => { },

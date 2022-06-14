@@ -3,7 +3,7 @@
 </script>
 
 <script>
-    import { UserPlusIcon, LogOutIcon } from "svelte-feather-icons";
+    import { UserPlusIcon, LogOutIcon, LockIcon } from "svelte-feather-icons";
     import { onMount } from "svelte";
     import LZString from "lz-string";
 
@@ -110,7 +110,7 @@
                     </div>
                     <div class="time_ago">
                         {#if $connectionSecure && $connectionSecure[room]}
-                            true
+                            <LockIcon />
                             <br />
                         {/if}
                         5M Ago
