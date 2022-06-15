@@ -110,9 +110,8 @@
                     </div>
                     <div class="time_ago">
                         {#if $connectionSecure && $connectionSecure[room]}
-                            <div class="secure">
-                                <LockIcon />
-                            </div>
+                            <LockIcon />
+                            <br />
                         {/if}
                         5M Ago
                     </div>
@@ -302,13 +301,6 @@
     }
     .time_ago {
         font-size: 12px;
-    }
-    .secure {
-        width: 40px;
-        height: 40px;
-        color: green;
-        flex-direction: row-reverse;
-        align-items: center;
     }
 
     .right {
