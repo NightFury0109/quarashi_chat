@@ -49,7 +49,6 @@ export const sendMessage_coturn = (message_content) => {
 }
 
 const createPeerConnection = (isInitiator) => {
-    iceServers == null
     localConnection = new RTCPeerConnection(iceServers);
 
     localConnection.onicecandidate = (event) => {
@@ -58,6 +57,7 @@ const createPeerConnection = (isInitiator) => {
             connectionSecure.subscribe(secure => {
                 connectSecure = secure
             })
+            console.log('event.candidate>>>>>>>>>>', event.candidate)
             sendMessage({
                 type: 'candidate',
                 label: event.candidate.sdpMLineIndex,
@@ -66,6 +66,7 @@ const createPeerConnection = (isInitiator) => {
             });
             // console.log('event.candidate>>>>>', event.candidate)
 
+            // If a srflx candidate was found, notify that the STUN server works!
             if (event.candidate.type == "srflx") {
                 console.log("The STUN server is reachable!");
                 connectSecure[room] = true
