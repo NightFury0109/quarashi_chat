@@ -16,8 +16,8 @@ export const coturnConnect = () => {
     socket = io('http://localhost:5000');
 
     socket.on('ipaddr', (ipaddr) => {
-        console.log(ipaddr)
         ip = ipaddr
+        console.log(ip)
     });
     socket.on('created', (room, clientId) => {
         console.log('created room', room, '- my client ID is ', clientId)
@@ -34,12 +34,8 @@ export const coturnConnect = () => {
     socket.on('ready', () => {
         createPeerConnection(isInitiator);
     })
-    socket.on('log', () => {
-        console.log.apply(console, array);
-    })
     socket.on('message', (message) => {
         signalingMessageCallback(message);
-        // console.log('Client received message:', message);
     })
 }
 
@@ -51,18 +47,14 @@ export const connectSocket_coturn = () => {
 export const sendMessage_coturn = (message_content) => {
     sendChannel.send(message_content)
 }
-let i = 0
+
 const createPeerConnection = (isInitiator) => {
     iceServers == null
     localConnection = new RTCPeerConnection(iceServers);
 
     localConnection.onicecandidate = (event) => {
-        i++
-        console.log(i)
-        console.log('event>>>>>>>>', event)
         // check the turn or stun server is working
-        if (typeof event.candidate !== "null") {
-            console.log('event.candidate>>><<', event.candidate)
+        if (event.candidate !== null) {
             let connectSecure;
             connectionSecure.subscribe(secure => {
                 connectSecure = secure
@@ -78,7 +70,6 @@ const createPeerConnection = (isInitiator) => {
                 console.log("The TURN server is reachable !");
                 connectSecure[room] = false
             }
-            console.log('connectSecure>>>>>>', connectSecure)
             connectionSecure.set(connectSecure)
         }
 
@@ -118,13 +109,11 @@ const signalingMessageCallback = (message) => {
         return 0;
     } else {
         if (message.type === 'offer') {
-            // console.log('Got offer. Sending answer to peer.');
             localConnection.setRemoteDescription(new RTCSessionDescription(message), () => { },
                 logError);
             localConnection.createAnswer(onLocalSessionCreated, logError);
 
         } else if (message.type === 'answer') {
-            // console.log('Got answer.');
             localConnection.setRemoteDescription(new RTCSessionDescription(message), () => { },
                 logError);
 
@@ -179,11 +168,12 @@ const onDataChannelCreated = (channel) => {
 
 const onLocalSessionCreated = (desc) => {
     localConnection.setLocalDescription(desc).then(() => {
-        // console.log('sending local desc:', localConnection.localDescription);
         sendMessage(localConnection.localDescription);
+        // console.log('sending local desc:', localConnection.localDescription);
     }).catch(logError);
 }
 
+// datachannel open or close event
 const onSendChannelStateChange = () => {
     const readyState = sendChannel.readyState;
     console.log('Send channel state is: ' + readyState);
@@ -199,7 +189,7 @@ const receiveDataChromeFactory = () => {
             } else {
                 message = {}
             }
-            console.log('event.data', event.data, typeof event.data)
+            // console.log('event.data', event.data, typeof event.data)
             let create_time = new Date();
             let data = {
                 message_content: event.data,
