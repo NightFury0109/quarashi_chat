@@ -110,8 +110,9 @@
                     </div>
                     <div class="time_ago">
                         {#if $connectionSecure && $connectionSecure[room]}
-                            <LockIcon />
-                            <br />
+                            <div class="secure">
+                                <LockIcon />
+                            </div>
                         {/if}
                         5M Ago
                     </div>

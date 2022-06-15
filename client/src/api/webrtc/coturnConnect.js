@@ -16,8 +16,8 @@ export const coturnConnect = () => {
     socket = io('http://localhost:5000');
 
     socket.on('ipaddr', (ipaddr) => {
-        console.log(ipaddr)
         ip = ipaddr
+        console.log(ipaddr)
     });
     socket.on('created', (room, clientId) => {
         console.log('created room', room, '- my client ID is ', clientId)
@@ -33,9 +33,6 @@ export const coturnConnect = () => {
     })
     socket.on('ready', () => {
         createPeerConnection(isInitiator);
-    })
-    socket.on('log', () => {
-        console.log.apply(console, array);
     })
     socket.on('message', (message) => {
         signalingMessageCallback(message);
