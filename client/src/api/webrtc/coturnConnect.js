@@ -17,7 +17,7 @@ export const coturnConnect = () => {
 
     socket.on('ipaddr', (ipaddr) => {
         ip = ipaddr
-        console.log(ipaddr)
+        console.log(ip)
     });
     socket.on('created', (room, clientId) => {
         console.log('created room', room, '- my client ID is ', clientId)
@@ -53,11 +53,6 @@ const createPeerConnection = (isInitiator) => {
     localConnection = new RTCPeerConnection(iceServers);
 
     localConnection.onicecandidate = (event) => {
-        console.log(
-            "The ICE candidate (transport address: '" +
-            event.candidate.candidate +
-            "') has been added to this connection."
-        );
         // check the turn or stun server is working
         if (event.candidate !== null) {
             let connectSecure;
@@ -75,7 +70,6 @@ const createPeerConnection = (isInitiator) => {
                 console.log("The TURN server is reachable !");
                 connectSecure[room] = false
             }
-            console.log('connectSecure>>>>>>', connectSecure)
             connectionSecure.set(connectSecure)
         }
 
@@ -114,15 +108,12 @@ const signalingMessageCallback = (message) => {
         console.log('message not received yet from socket server')
         return 0;
     } else {
-        console.log('message>>>>>>>>>', message)
         if (message.type === 'offer') {
-            // console.log('Got offer. Sending answer to peer.');
             localConnection.setRemoteDescription(new RTCSessionDescription(message), () => { },
                 logError);
             localConnection.createAnswer(onLocalSessionCreated, logError);
 
         } else if (message.type === 'answer') {
-            // console.log('Got answer.');
             localConnection.setRemoteDescription(new RTCSessionDescription(message), () => { },
                 logError);
 
@@ -197,7 +188,6 @@ const receiveDataChromeFactory = () => {
             } else {
                 message = {}
             }
-            console.log('event.data', event.data, typeof event.data)
             let create_time = new Date();
             let data = {
                 message_content: event.data,

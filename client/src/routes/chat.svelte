@@ -300,6 +300,13 @@
         color: var(--grey_color);
         margin-bottom: 0px;
     }
+    .secure {
+        width: 40px;
+        height: 40px;
+        color: green;
+        flex-direction: row-reverse;
+        align-items: center;
+    }
     .time_ago {
         font-size: 12px;
     }
