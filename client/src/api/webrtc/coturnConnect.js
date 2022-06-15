@@ -53,15 +53,21 @@ const createPeerConnection = (isInitiator) => {
     localConnection = new RTCPeerConnection(iceServers);
 
     localConnection.onicecandidate = (event) => {
-        // check the turn or stun server is working
         if (event.candidate !== null) {
             let connectSecure;
             connectionSecure.subscribe(secure => {
                 connectSecure = secure
             })
+            sendMessage({
+                type: 'candidate',
+                label: event.candidate.sdpMLineIndex,
+                id: event.candidate.sdpMid,
+                candidate: event.candidate.candidate
+            });
+            // console.log('event.candidate>>>>>', event.candidate)
+
             if (event.candidate.type == "srflx") {
                 console.log("The STUN server is reachable!");
-                console.log(`Your Public IP Address is: ${event.candidate.address}`);
                 connectSecure[room] = true
             }
 
@@ -71,15 +77,6 @@ const createPeerConnection = (isInitiator) => {
                 connectSecure[room] = false
             }
             connectionSecure.set(connectSecure)
-        }
-
-        if (event.candidate) {
-            sendMessage({
-                type: 'candidate',
-                label: event.candidate.sdpMLineIndex,
-                id: event.candidate.sdpMid,
-                candidate: event.candidate.candidate
-            });
         }
     };
 
@@ -104,10 +101,7 @@ const createPeerConnection = (isInitiator) => {
 }
 
 const signalingMessageCallback = (message) => {
-    if (typeof message === "null" || isEmpty(message)) {
-        console.log('message not received yet from socket server')
-        return 0;
-    } else {
+    if (message !== null) {
         if (message.type === 'offer') {
             localConnection.setRemoteDescription(new RTCSessionDescription(message), () => { },
                 logError);

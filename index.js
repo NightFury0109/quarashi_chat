@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
             socket.join(room);
             socket.emit('joined', room, socket.id);
             io.sockets.in(room).emit('ready', room);
-            // socket.broadcast.emit('ready', room);
+            socket.broadcast.emit('ready', room);
             // console.log('Client ID ' + socket.id + ' joined room ' + room);
         } else {
             // max two clients
@@ -55,15 +55,6 @@ io.on('connection', (socket) => {
                 }
             });
         }
-    });
-
-    socket.on('disconnect', function (reason) {
-        console.log(`Peer or server disconnected. Reason: ${reason}.`);
-        socket.broadcast.emit('bye');
-    });
-
-    socket.on('bye', function (room) {
-        console.log(`Peer said bye on room ${room}.`);
     });
 })
 
