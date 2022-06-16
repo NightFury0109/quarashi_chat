@@ -3,11 +3,16 @@
 </script>
 
 <script>
-    import { UserPlusIcon, LogOutIcon, LockIcon } from "svelte-feather-icons";
-    import { onMount } from "svelte";
+    import {
+        UserPlusIcon,
+        LogOutIcon,
+        LockIcon,
+        SettingsIcon,
+    } from "svelte-feather-icons";
     import LZString from "lz-string";
 
     import ChatArea from "$lib/components/chat/ChatArea.svelte";
+    import Setting from "$lib/components/setting/Setting.svelte";
     import { connectSocket, connectRTC } from "./../api/webrtc";
     import isEmpty from "../utils/is-empty";
 
@@ -18,7 +23,8 @@
 
     let search,
         userData,
-        room = "";
+        room = "",
+        setting = false;
 
     $: if (typeof localStorage !== "undefined") {
         if (isEmpty(localStorage.getItem("user_token"))) {
@@ -45,6 +51,14 @@
         connectSocket();
         room = roomID;
     };
+
+    const goSetting = () => {
+        if (!setting) {
+            setting = true;
+        } else {
+            setting = false;
+        }
+    };
 </script>
 
 <svelte:head>
@@ -67,8 +81,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="add_user">
-                    <UserPlusIcon size="20" />
+                <div style="display: flex;">
+                    <div class="setting" on:click={goSetting}>
+                        <SettingsIcon size="20" />
+                    </div>
+                    <div class="add_user">
+                        <UserPlusIcon size="20" />
+                    </div>
                 </div>
             </div>
 
@@ -120,7 +139,9 @@
             </div>
         </div>
         <div class="col-lg-9 col-md-12 col-sm-12 col-12 right">
-            {#if !isEmpty(room)}
+            {#if setting}
+                <Setting />
+            {:else if !isEmpty(room)}
                 <ChatArea {room} />
             {/if}
         </div>
@@ -183,8 +204,9 @@
         font-size: 18px;
         color: white;
     }
-    .add_user {
+    .setting {
         margin: 20px;
+        margin-right: 0px;
         border-radius: 50%;
         border: 2px solid #22232e;
         width: 44px;
@@ -192,6 +214,22 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+    .add_user {
+        margin: 20px;
+        margin-left: 5px;
+        border-radius: 50%;
+        border: 2px solid #22232e;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .setting:hover,
+    .add_user:hover {
+        background-color: #0b0b12;
+        color: white;
     }
 
     .input-group {
