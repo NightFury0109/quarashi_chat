@@ -12,14 +12,14 @@
 	const { addNotification } = getNotificationsContext();
 	let username, password;
 
-	onMount(() => {
-		if (typeof localStorage !== "undefined") {
-			let token = localStorage.getItem("user_token");
-			if (token) {
-				window.location = "/chat";
-			}
-		}
-	});
+	// onMount(() => {
+	// 	if (typeof localStorage !== "undefined") {
+	// 		let token = localStorage.getItem("user_token");
+	// 		if (token) {
+	// 			window.location = "/chat";
+	// 		}
+	// 	}
+	// });
 
 	const goChat = () => {
 		if (!password || !username) {

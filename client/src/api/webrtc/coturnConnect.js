@@ -4,7 +4,7 @@ let decompress = LZString.decompress;
 
 import isEmpty from '../../utils/is-empty'
 import { iceServers } from '../../utils/iceServers.js'
-import { connectionSecure } from './../../store'
+import { connectionSecure, socketStore } from './../../store'
 
 let sendChannel, localConnection, isInitiator;
 
@@ -13,6 +13,11 @@ let room = "lionheart";
 let ip;
 
 export const coturnConnect = () => {
+    // if($socketStore !== null){
+    //     socketStore.subscribe(item=>{
+    //         socket = item
+    //     })
+    // }
     socket = io('http://localhost:5000');
 
     socket.on('ipaddr', (ipaddr) => {
@@ -68,6 +73,8 @@ const createPeerConnection = (isInitiator) => {
 
             // If a srflx candidate was found, notify that the STUN server works!
             if (event.candidate.type == "srflx") {
+                console.log(`   Your Public IP Address is: ${event.candidate.address}`);
+                ip = event.candidate.address;
                 console.log("The STUN server is reachable!");
                 connectSecure[room] = true
             }

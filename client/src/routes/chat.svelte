@@ -20,18 +20,15 @@
         userData,
         room = "";
 
-    onMount(() => {
-        if (typeof localStorage !== "undefined") {
-            if (isEmpty(localStorage.getItem("user_token"))) {
-                window.location = "/login";
-            }
-        }
-    });
-
     $: if (typeof localStorage !== "undefined") {
-        userData = JSON.parse(
-            LZString.decompress(localStorage.getItem("user_token"))
-        );
+        if (isEmpty(localStorage.getItem("user_token"))) {
+            window.location = "/login";
+        } else {
+            userData = JSON.parse(
+                LZString.decompress(localStorage.getItem("user_token"))
+            );
+        }
+
         console.log("$connectionSecure", $connectionSecure);
     }
 
