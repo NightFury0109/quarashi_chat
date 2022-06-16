@@ -1,9 +1,10 @@
 <script>
-    let disableGroupNoti = false;
-    let disablePrivate = false;
+    let disableGroupNoti;
+    let disablePrivate;
 
     import Switch from "../common/Switch.svelte";
-    import { privateSetting, notificationSetting } from "./../../../store";
+    import isEmpty from "../../../utils/is-empty";
+    import { onMount } from "svelte";
 
     const deleteAllData = () => {
         if (typeof localStorage !== "undefined") {
@@ -11,8 +12,24 @@
         }
     };
 
-    $: privateSetting.set(!disablePrivate);
-    $: notificationSetting.set(!disableGroupNoti);
+    onMount(() => {
+        if (!isEmpty(localStorage.getItem("setting"))) {
+            let setting = JSON.parse(localStorage.getItem("setting"));
+            disableGroupNoti = !setting.notificationSetting;
+            disablePrivate = !setting.privateSetting;
+        } else {
+            disableGroupNoti = false;
+            disablePrivate = false;
+        }
+    });
+
+    $: if (typeof localStorage !== "undefined") {
+        let setting = {
+            notificationSetting: !disableGroupNoti,
+            privateSetting: !disablePrivate,
+        };
+        localStorage.setItem("setting", JSON.stringify(setting));
+    }
 </script>
 
 <div class="setting_box">
