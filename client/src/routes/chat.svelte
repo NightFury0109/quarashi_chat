@@ -14,12 +14,14 @@
     import ChatArea from "$lib/components/chat/ChatArea.svelte";
     import Setting from "$lib/components/setting/Setting.svelte";
     import { connectSocket, connectRTC } from "./../api/webrtc";
+    import { connectSignaling } from "./../api/webrtc/signalingConnect";
     import isEmpty from "../utils/is-empty";
 
     import avatar from "./../assets/img/avatar/avatar_em.png";
     // import avatar from "./../assets/img/avatar/avatar.png";
     import search_logo from "./../assets/img/search.svg";
     import { connectionSecure } from "./../store";
+    import { onMount } from "svelte";
 
     let search,
         userData,
@@ -34,9 +36,10 @@
                 LZString.decompress(localStorage.getItem("user_token"))
             );
         }
-
-        console.log("$connectionSecure", $connectionSecure);
     }
+    onMount(() => {
+        connectSignaling(userData);
+    });
 
     const logout = () => {
         if (typeof localStorage !== "undefined") {
@@ -46,6 +49,7 @@
     };
 
     const connectWRTC = (roomID, e) => {
+        setting = false;
         connectRTC();
         e.target.classList.add("active");
         connectSocket();
