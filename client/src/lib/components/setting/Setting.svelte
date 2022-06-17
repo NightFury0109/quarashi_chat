@@ -4,7 +4,6 @@
 
     import Switch from "../common/Switch.svelte";
     import isEmpty from "../../../utils/is-empty";
-    import { onMount } from "svelte";
 
     const deleteAllData = () => {
         if (typeof localStorage !== "undefined") {
@@ -12,16 +11,15 @@
         }
     };
 
-    onMount(() => {
-        if (!isEmpty(localStorage.getItem("setting"))) {
-            let setting = JSON.parse(localStorage.getItem("setting"));
-            disableGroupNoti = !setting.notificationSetting;
-            disablePrivate = !setting.privateSetting;
-        } else {
-            disableGroupNoti = false;
-            disablePrivate = false;
-        }
-    });
+    if (!isEmpty(localStorage.getItem("setting"))) {
+        let setting = JSON.parse(localStorage.getItem("setting"));
+        console.log("setting", setting);
+        disableGroupNoti = !setting.notificationSetting;
+        disablePrivate = !setting.privateSetting;
+    } else {
+        disableGroupNoti = false;
+        disablePrivate = false;
+    }
 
     $: if (typeof localStorage !== "undefined") {
         let setting = {

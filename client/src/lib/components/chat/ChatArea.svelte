@@ -3,10 +3,10 @@
     let compress = LZString.compress;
     let decompress = LZString.decompress;
     import { afterUpdate, onMount } from "svelte";
-    import { SendIcon } from "svelte-feather-icons";
+    import { SendIcon, MoreHorizontalIcon } from "svelte-feather-icons";
 
-    import { send_message } from "../../../api/message/message.js";
     import isEmpty from "../../../utils/is-empty.js";
+    import { send_message } from "../../../api/message/message.js";
     import { difference2Parts } from "./../../../helper";
 
     export let room = "";
@@ -18,7 +18,8 @@
         current_time,
         message,
         username,
-        diffs = [];
+        diffs = [],
+        user_chat_setting_hover = false;
 
     $: setInterval(() => {
         current_time = new Date();
@@ -120,9 +121,31 @@
             text.style.height = 30 + "px";
         }
     };
+
+    const enter_setting = () => {
+        user_chat_setting_hover = true;
+    };
+    const leave_setting = () => {
+        user_chat_setting_hover = false;
+    };
 </script>
 
 <div class="chat_area">
+    <div
+        class="chat_setting"
+        on:mouseenter={enter_setting}
+        on:mouseleave={leave_setting}
+    >
+        <div class="chat_icon">
+            <MoreHorizontalIcon size="25" />
+        </div>
+        {#if user_chat_setting_hover}
+            <div class="setting_options">
+                <li>Activate Secure Chat</li>
+                <li>Block User</li>
+            </div>
+        {/if}
+    </div>
     <div class="messages" id="messages">
         {#if !isEmpty(message)}
             {#each message[`${room}`] as item, index}
@@ -170,6 +193,44 @@
 </div>
 
 <style>
+    .chat_setting {
+        position: absolute;
+        right: 0;
+        margin-right: 20px;
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    .chat_icon {
+        height: 30px;
+        width: 30px;
+        background-color: rgba(65, 64, 64, 0.7);
+        justify-content: flex-end;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        border-radius: 50%;
+        padding: 5px;
+    }
+    .setting_options {
+        background-color: rgba(65, 64, 64, 0.7);
+        border-radius: 12px;
+        padding: 5px;
+        margin-top: 5px;
+    }
+    .setting_options li {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        padding: 2px 10px;
+        list-style-type: none;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    .setting_options li:hover {
+        color: white;
+    }
     .chat_area {
         height: 100%;
         position: relative;
