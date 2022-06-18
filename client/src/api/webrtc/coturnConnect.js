@@ -4,20 +4,14 @@ let decompress = LZString.decompress;
 
 import isEmpty from '../../utils/is-empty'
 import { iceServers } from '../../utils/iceServers.js'
-import { connectionSecure, socketStore } from './../../store'
+import { connectionSecure } from './../../store'
 
 let sendChannel, localConnection, isInitiator;
 
-let socket, turnReady;
+let socket, turnReady, ip;
 let room = "lionheart";
-let ip;
 
 export const coturnConnect = () => {
-    // if($socketStore !== null){
-    //     socketStore.subscribe(item=>{
-    //         socket = item
-    //     })
-    // }
     socket = io('http://localhost:5000');
 
     socket.on('ipaddr', (ipaddr) => {
@@ -170,7 +164,6 @@ const onDataChannelCreated = (channel) => {
 
 const onLocalSessionCreated = (desc) => {
     localConnection.setLocalDescription(desc).then(() => {
-        // console.log('sending local desc:', localConnection.localDescription);
         sendMessage(localConnection.localDescription);
     }).catch(logError);
 }

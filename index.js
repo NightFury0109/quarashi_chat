@@ -16,10 +16,7 @@ app.get('/', (req, res) => {
     res.send('<h1>Hello world</h1>');
 });
 
-// trying with webrtc and socket.io
-
 io.on('connection', (socket) => {
-    // convenience function to log server messages on the client
     socket.on('message', (message) => {
         socket.broadcast.emit('message', message);
     });
