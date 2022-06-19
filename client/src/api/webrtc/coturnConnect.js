@@ -3,7 +3,7 @@ let compress = LZString.compress;
 let decompress = LZString.decompress;
 
 import isEmpty from '../../utils/is-empty'
-import { iceServers } from '../../utils/iceServers.js'
+import { stun_iceServers, turn_iceServers } from '../../utils/iceServers.js'
 import { connectionSecure } from './../../store'
 
 let sendChannel, localConnection, isInitiator;
@@ -48,7 +48,11 @@ export const sendMessage_coturn = (message_content) => {
 }
 
 const createPeerConnection = (isInitiator) => {
-    localConnection = new RTCPeerConnection(iceServers);
+    if (typeof localStorage !== "undefined" && JSON.parse(decompress(localStorage.getItem('private')))[room]) {
+        localConnection = new RTCPeerConnection(stun_iceServers);
+    } else {
+        localConnection = new RTCPeerConnection(turn_iceServers);
+    }
 
     localConnection.onicecandidate = (event) => {
         if (event.candidate !== null) {

@@ -1,12 +1,15 @@
-export const iceServers = {
+export const turn_iceServers = {
     'iceServers': [
-        // Test some TURN server
         {
             urls: 'turn:178.128.192.242?transport=udp',
             username: 'jovan',
             credential: '123456',
-        },
-        // Test some STUN server
+        }
+    ]
+};
+
+export const stun_iceServers = {
+    'iceServers': [
         {
             urls: 'stun:178.128.192.242?transport=udp',
         },
