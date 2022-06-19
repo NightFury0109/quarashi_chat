@@ -13,7 +13,6 @@
 
     if (!isEmpty(localStorage.getItem("setting"))) {
         let setting = JSON.parse(localStorage.getItem("setting"));
-        console.log("setting", setting);
         disableGroupNoti = !setting.notificationSetting;
         disablePrivate = !setting.privateSetting;
     } else {

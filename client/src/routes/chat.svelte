@@ -14,6 +14,7 @@
     import ChatArea from "$lib/components/chat/ChatArea.svelte";
     import Setting from "$lib/components/setting/Setting.svelte";
     import { connectSocket, connectRTC } from "./../api/webrtc";
+    import { getUser } from "./../api/user/getUser";
     import isEmpty from "../utils/is-empty";
 
     import avatar from "./../assets/img/avatar/avatar_em.png";
@@ -31,9 +32,11 @@
         secure = {};
 
     $: setInterval(() => {
-        secure = localStorage.getItem("private")
-            ? JSON.parse(decompress(localStorage.getItem("private")))
-            : {};
+        if (typeof localStorage !== "undefined") {
+            secure = localStorage.getItem("private")
+                ? JSON.parse(decompress(localStorage.getItem("private")))
+                : {};
+        }
     });
 
     $: if (typeof localStorage !== "undefined") {
@@ -69,6 +72,10 @@
         } else {
             setting = false;
         }
+    };
+
+    const getOnineUser = () => {
+        let data = getUser(search);
     };
 </script>
 
@@ -111,6 +118,7 @@
                     id="search"
                     bind:value={search}
                     aria-describedby="search-icon"
+                    on:input={getOnineUser}
                 />
                 <span class="input-group-text" id="search-icon">
                     <img src={search_logo} alt="search" />
