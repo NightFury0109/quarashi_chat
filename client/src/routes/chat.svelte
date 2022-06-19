@@ -19,13 +19,22 @@
     import avatar from "./../assets/img/avatar/avatar_em.png";
     // import avatar from "./../assets/img/avatar/avatar.png";
     import search_logo from "./../assets/img/search.svg";
-    import { connectionSecure } from "./../store";
     import { onMount } from "svelte";
+
+    let compress = LZString.compress;
+    let decompress = LZString.decompress;
 
     let search,
         userData,
         room = "",
-        setting = false;
+        setting = false,
+        secure = {};
+
+    $: setInterval(() => {
+        secure = localStorage.getItem("private")
+            ? JSON.parse(decompress(localStorage.getItem("private")))
+            : {};
+    });
 
     $: if (typeof localStorage !== "undefined") {
         if (isEmpty(localStorage.getItem("user_token"))) {
@@ -127,9 +136,9 @@
                         </div>
                     </div>
                     <div class="time_ago">
-                        {#if $connectionSecure && $connectionSecure[room]}
+                        {#if secure && secure["lionheart"]}
                             <div class="secure">
-                                <LockIcon />
+                                <LockIcon size="20" />
                             </div>
                         {/if}
                         5M Ago
@@ -338,11 +347,12 @@
         margin-bottom: 0px;
     }
     .secure {
-        width: 40px;
-        height: 40px;
         color: green;
+        display: flex;
+        margin-bottom: 5px;
         flex-direction: row-reverse;
         align-items: center;
+        justify-content: center;
     }
     .time_ago {
         font-size: 12px;

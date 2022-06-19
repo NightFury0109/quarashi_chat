@@ -19,7 +19,8 @@
         message,
         username,
         diffs = [],
-        user_chat_setting_hover = false;
+        user_chat_setting_hover = false,
+        secure;
 
     $: setInterval(() => {
         current_time = new Date();
@@ -30,10 +31,12 @@
                 decompress(localStorage.getItem("peer_chat_content"))
             );
         }
+        secure = localStorage.getItem("private")
+            ? JSON.parse(decompress(localStorage.getItem("private")))[room]
+            : {};
     });
 
     $: if (typeof localStorage !== "undefined") {
-        // console.log(message)
         username = JSON.parse(decompress(localStorage.getItem("user_token")))[
             "username"
         ];
@@ -128,6 +131,20 @@
     const leave_setting = () => {
         user_chat_setting_hover = false;
     };
+
+    const privateChat = () => {
+        if (typeof localStorage !== "undefined") {
+            let data;
+            if (localStorage.getItem("private")) {
+                data = JSON.parse(decompress(localStorage.getItem("private")));
+                data[room] = !data[room];
+            } else {
+                data = {};
+                data[room] = true;
+            }
+            localStorage.setItem("private", compress(JSON.stringify(data)));
+        }
+    };
 </script>
 
 <div class="chat_area">
@@ -141,7 +158,13 @@
         </div>
         {#if user_chat_setting_hover}
             <div class="setting_options">
-                <li>Activate Secure Chat</li>
+                <li on:click={privateChat}>
+                    {#if secure}
+                        Disable Secure Chat
+                    {:else}
+                        Activate Secure Chat
+                    {/if}
+                </li>
                 <li>Block User</li>
             </div>
         {/if}
@@ -215,7 +238,7 @@
         padding: 5px;
     }
     .setting_options {
-        background-color: rgba(65, 64, 64, 0.7);
+        background-color: rgba(65, 64, 64, 0.9);
         border-radius: 12px;
         padding: 5px;
         margin-top: 5px;
