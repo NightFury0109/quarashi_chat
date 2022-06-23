@@ -25,11 +25,11 @@
     let compress = LZString.compress;
     let decompress = LZString.decompress;
 
-    let search,
-        userData,
-        room = "",
+    let room = "",
+        secure = {},
         setting = false,
-        secure = {};
+        userData,
+        search;
 
     $: setInterval(() => {
         if (typeof localStorage !== "undefined") {
