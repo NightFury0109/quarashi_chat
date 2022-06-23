@@ -48,7 +48,7 @@ export const sendMessage_coturn = (message_content) => {
 }
 
 const createPeerConnection = (isInitiator) => {
-    if (typeof localStorage !== "undefined" && JSON.parse(decompress(localStorage.getItem('private')))[room]) {
+    if (typeof localStorage !== "undefined" && localStorage.getItem('private') && JSON.parse(decompress(localStorage.getItem('private')))[room]) {
         localConnection = new RTCPeerConnection(stun_iceServers);
     } else {
         localConnection = new RTCPeerConnection(turn_iceServers);
